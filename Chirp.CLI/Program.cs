@@ -50,6 +50,7 @@ class Program
 
             string final = $"{user},\"{usermessage}\",{unixtime}";
 
+            // following code is adapted from https://learn.microsoft.com/en-us/dotnet/api/system.io.file.appendtext?view=net-7.0
             using(StreamWriter sw = File.AppendText("chirp_cli_db.csv")){
                 sw.WriteLine(final);
             }
