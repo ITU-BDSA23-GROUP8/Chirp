@@ -14,6 +14,7 @@ class Cheep{
 
     public override string ToString()
     {
+        // timestamp.toString is made with inspiration from https://www.shekhali.com/datetime-format-in-c-sharp-programming/
         return $"{user} @ {timestamp.ToString("MM/dd/yy HH:mm:ss")}: {message}";
     }
 
