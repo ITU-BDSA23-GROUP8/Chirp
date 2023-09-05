@@ -14,7 +14,7 @@ class Cheep{
 
     public override string ToString()
     {
-        return $"{user} @ {timestamp}: {message}";
+        return $"{user} @ {timestamp.ToString("MM/dd/yy HH:mm:ss")}: {message}";
     }
 
 
