@@ -7,7 +7,7 @@ class Cheep{
 
     public Cheep(string user, string message, DateTimeOffset timestamp) {
         this.user = user; 
-        this.message = message;
+        this.message = message.Replace("\"", ""); //backslash is used to escape quotation mark
         this.timestamp = timestamp; 
 
     }
