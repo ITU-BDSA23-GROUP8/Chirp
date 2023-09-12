@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.IO;
 using System.Net.Security;
@@ -7,26 +8,25 @@ using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
 
+using SimpleDB;
 
-class Program
-{
+
+
+class Program {
+    
     
     public static void Main(string[] args)
     {
+        CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
         if(args[0].Equals("read")){
             
             try
             {
                 // Open the text file using a stream reader.
-                using (var sr = new StreamReader("chirp_cli_db.csv"))
-                using(var csv = new CsvReader(sr, CultureInfo.InvariantCulture)) {
-                    var cheeps = csv.GetRecords<Cheep>(); 
-                    UserInterface.PrintCheeps(cheeps);
-                
-                }
-                
-            }
+                var cheeps = database.Read();
+                UserInterface.PrintCheeps(cheeps);
             
+            }
             catch (IOException e)
             {
                 Console.WriteLine("The file could not be read:");
@@ -37,18 +37,7 @@ class Program
             
             Cheep cheep = new(Environment.UserName, args[1], localTime.ToUnixTimeSeconds());
             
-           
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture) {
-                HasHeaderRecord = false, 
-            }; 
-
-            using (var stream = File.Open("chirp_cli_db.csv", FileMode.Append))
-            using (var writer = new StreamWriter(stream))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
-                
-                csv.WriteRecord(cheep); 
-                csv.NextRecord();
-            }
+            database.Store(cheep);
 
         }
       
