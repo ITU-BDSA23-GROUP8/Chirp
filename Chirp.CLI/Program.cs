@@ -20,12 +20,8 @@ class Program
                 // Open the text file using a stream reader.
                 using (var sr = new StreamReader("chirp_cli_db.csv"))
                 using(var csv = new CsvReader(sr, CultureInfo.InvariantCulture)) {
-                    var records = csv.GetRecords<Cheep>(); 
-                    foreach (var item in records)
-                {
-                    var time = DateTimeOffset.FromUnixTimeSeconds(item.Timestamp).LocalDateTime;
-                    Console.WriteLine($"{item.Author} @ {time.ToString("MM/dd/yy HH:mm:ss")}: {item.Message}");
-                }
+                    var cheeps = csv.GetRecords<Cheep>(); 
+                    UserInterface.PrintCheeps(cheeps);
                 
                 }
                 
