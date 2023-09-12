@@ -1,62 +1,62 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net.Security;
+using System.Text;
 using System.Text.RegularExpressions;
+using CsvHelper;
+using CsvHelper.Configuration;
+
 
 class Program
 {
     
     public static void Main(string[] args)
     {
-        if(args.Length == 0){
-            List<Cheep> cheeps = new List<Cheep>();  
+        if(args[0].Equals("read")){
+            
             try
             {
                 // Open the text file using a stream reader.
                 using (var sr = new StreamReader("chirp_cli_db.csv"))
+                using(var csv = new CsvReader(sr, CultureInfo.InvariantCulture)) {
+                    var records = csv.GetRecords<Cheep>(); 
+                    foreach (var item in records)
                 {
-                    string cheep; 
-                    sr.ReadLine();
-                    while (!sr.EndOfStream)
-                    {
-                        cheep = sr.ReadLine();
-
-                        // Following code is adapted from https://stackoverflow.com/questions/3507498/reading-csv-files-using-c-sharp/34265869#34265869 
-                        Regex CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-                        string[] values = CSVParser.Split(cheep);
-                        // Following code was adapted from https://stackoverflow.com/questions/249760/how-can-i-convert-a-unix-timestamp-to-datetime-and-vice-versa 
-                        cheeps.Add(new Cheep(values[0], values[1], DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(values[2])).LocalDateTime));
-                    }
-
-                    // Read the stream as a string, and write the string to the console.f
-                    foreach (var item in cheeps)
-                    {
-                    Console.WriteLine(item);
-                    }
+                    var time = DateTimeOffset.FromUnixTimeSeconds(item.Timestamp).LocalDateTime;
+                    Console.WriteLine($"{item.Author} @ {time.ToString("MM/dd/yy HH:mm:ss")}: {item.Message}");
+                }
                 
                 }
+                
             }
+            
             catch (IOException e)
             {
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
         } else if(args[0].Equals("cheep")){
-
-            string usermessage = args[1];
-            string user = Environment.UserName;
             DateTimeOffset localTime = DateTimeOffset.Now;
-            long unixtime = localTime.ToUnixTimeSeconds();
+            
+            Cheep cheep = new(Environment.UserName, args[1], localTime.ToUnixTimeSeconds());
+            
+           
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture) {
+                HasHeaderRecord = false, 
+            }; 
 
-            string final = $"{user},\"{usermessage}\",{unixtime}";
-
-            // following code is adapted from https://learn.microsoft.com/en-us/dotnet/api/system.io.file.appendtext?view=net-7.0
-            using(StreamWriter sw = File.AppendText("chirp_cli_db.csv")){
-                sw.WriteLine(final);
+            using (var stream = File.Open("chirp_cli_db.csv", FileMode.Append))
+            using (var writer = new StreamWriter(stream))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+                
+                csv.WriteRecord(cheep); 
+                csv.NextRecord();
             }
-
 
         }
       
     }
+
+    public record Cheep(string Author, string Message, long Timestamp);
 }
