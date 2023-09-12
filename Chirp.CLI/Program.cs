@@ -7,16 +7,37 @@ using System.Text;
 using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System.CommandLine;
 
 using SimpleDB;
 
 
 
 class Program {
+     
     
-    
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
+        var readOption = new Option<bool>(
+                    name: "--read",
+                    description: "Prints the cheeps stored in the database currently"
+                );
+        var cheepOption = new Option<string>(
+                    name: "--cheep",
+                    description: "Stores the string in the database, along with the author name and timestamp for cheep"
+                );
+        var rootCommand = new RootCommand("Chirp is a social media program"){
+            readOption,
+            cheepOption
+        };
+            rootCommand.SetHandler((cheep)=> 
+                {
+                    handleCommand(cheep);
+                },
+                readOption
+            ); return rootCommand.Invoke(args);
+        
+        /*
         CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
         if(args[0].Equals("read")){
             
@@ -39,8 +60,12 @@ class Program {
             
             database.Store(cheep);
 
-        }
+        }*/
       
+    }
+
+    public static void handleCommand(string cheep){
+        Console.WriteLine("hello");
     }
 
     public record Cheep(string Author, string Message, long Timestamp);
