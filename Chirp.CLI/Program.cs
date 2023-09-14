@@ -24,7 +24,7 @@ class Program {
         var cheepOption = new Option<string>(
             name: "cheep",
             description: "Write a cheep.");
-        readOption.AddAlias("-c");
+        cheepOption.AddAlias("-c");
 
         var rootCommand = new RootCommand("Chirp: write and read cheeps!");
         
