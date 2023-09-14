@@ -43,5 +43,5 @@ class Program {
       
     }
 
-    public record Cheep(string Author, string Message, long Timestamp);
+public record Cheep(string Author, string Message, long Timestamp);
 }
