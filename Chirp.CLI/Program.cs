@@ -7,20 +7,48 @@ using System.Text;
 using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System.CommandLine;
 
 using SimpleDB;
 
-
-
 class Program {
+     
     
-    
-    public static void Main(string[] args)
+    static async Task<int> Main(string[] args)
     {
+        var readOption = new Option<bool>(
+            name: "--read",
+            description: "Read cheeps.");
+        readOption.AddAlias("-r");
+
+        var cheepOption = new Option<string>(
+            name: "--cheep",
+            description: "Write a cheep.");
+        readOption.AddAlias("-c");
+
+        var rootCommand = new RootCommand("Chirp: write and read cheeps!");
+        
+        rootCommand.AddOption(readOption);
+        rootCommand.AddOption(cheepOption);
+
+        rootCommand.SetHandler((read, cheepMsg) =>
+        {
+            if(read){
+                 HandleRead();
+            }
+            else if(cheepMsg != null){
+                HandleCheep(cheepMsg);
+            }
+        },
+        readOption, cheepOption);
+
+        return await rootCommand.InvokeAsync(args);
+      
+    }
+
+    static void HandleRead(){
         CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
-        if(args[0].Equals("read")){
-            
-            try
+        try
             {
                 // Open the text file using a stream reader.
                 var cheeps = database.Read();
@@ -32,15 +60,15 @@ class Program {
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
-        } else if(args[0].Equals("cheep")){
-            DateTimeOffset localTime = DateTimeOffset.Now;
+    }
+
+    static void HandleCheep(string message){
+        CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
+        DateTimeOffset localTime = DateTimeOffset.Now;
             
-            Cheep cheep = new(Environment.UserName, args[1], localTime.ToUnixTimeSeconds());
+            Cheep cheep = new(Environment.UserName, message, localTime.ToUnixTimeSeconds());
             
             database.Store(cheep);
-
-        }
-      
     }
 
 public record Cheep(string Author, string Message, long Timestamp);
