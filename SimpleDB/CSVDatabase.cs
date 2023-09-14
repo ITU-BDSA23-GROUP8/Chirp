@@ -32,8 +32,8 @@ namespace SimpleDB;
             using (var writer = new StreamWriter(stream))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
                 
-                csv.WriteRecord(record); 
-                csv.NextRecord();
+            csv.WriteRecord(record); 
+            csv.NextRecord();
             }
 
     }
