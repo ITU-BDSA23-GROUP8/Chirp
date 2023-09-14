@@ -17,12 +17,12 @@ class Program {
     static async Task<int> Main(string[] args)
     {
         var readOption = new Option<bool>(
-            name: "--read",
+            name: "read",
             description: "Read cheeps.");
         readOption.AddAlias("-r");
 
         var cheepOption = new Option<string>(
-            name: "--cheep",
+            name: "cheep",
             description: "Write a cheep.");
         readOption.AddAlias("-c");
 
