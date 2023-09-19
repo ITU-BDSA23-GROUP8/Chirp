@@ -70,7 +70,6 @@ jobs:
         with:
           files: "Chirp*"
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
