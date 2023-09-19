@@ -10,9 +10,36 @@ namespace SimpleDB;
     string path;
     private IEnumerable<T> records;
 
+    // singleton static object
+    private static CSVDatabase<T> instance = null;
+
+    // an object to use in a singleton class
+    private List<CSVDatabase<T>> database = null;
+
+    // Restrict to create object of singleton class
+        
     public CSVDatabase(string path){
-        this.path=path;
+        if (database == null) {
+            this.path=path; 
+        }
     }
+
+    // The static method to provide global access to the singleton object
+        // Get singleton object of SingletonEmployeeService class
+    public static CSVDatabase<T> GetInstance(string path)
+        {
+            if (instance == null)
+            {
+                // Thread safe singleton
+                lock (typeof(CSVDatabase<T>))
+                {
+                    instance = new CSVDatabase<T>(path);
+                }
+            }
+            return instance;
+        }
+
+
     public IEnumerable<T> Read(int? limit = null){
         
         using (var sr = new StreamReader(path))
