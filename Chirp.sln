@@ -1,11 +1,18 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{29675EEA-28A2-4614-878C-6AF783924EAB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{345CF23A-9AD9-479F-8661-A0A9573B9B35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{A288F6B0-B3BB-4299-99C2-CBF68BF3880E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{48510D30-18F8-4621-AE0B-A8E4548EFBA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{BE28FEF9-5617-4CA9-B685-A48549285F2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{20F6EC94-76A9-4960-A075-5357A9F84A03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Tests", "test\Chirp.CLI.Tests\Chirp.CLI.Tests.csproj", "{434063CE-91DE-4A0D-91D7-81D179687476}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB.Tests", "test\SimpleDB.Tests\SimpleDB.Tests.csproj", "{A7FB3078-6FC3-43E6-B824-2D3782D4682D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
