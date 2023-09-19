@@ -5,7 +5,7 @@ on:
     branches:
       - workflow
     tags:
-      - "*"
+      - '*'
 
 jobs:
   build:
