@@ -12,7 +12,7 @@ using System.CommandLine;
 using SimpleDB;
 
 class Program {
-     
+
     
     static async Task<int> Main(string[] args)
     {
@@ -34,7 +34,7 @@ class Program {
         rootCommand.SetHandler((read, cheepMsg) =>
         {
             if(read){
-                 HandleRead();
+                HandleRead();
             }
             else if(cheepMsg != null){
                 HandleCheep(cheepMsg);
@@ -47,7 +47,8 @@ class Program {
     }
 
     static void HandleRead(){
-        CSVDatabase<Cheep> database = new("data/chirp_cli_db.csv");
+        CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
+
         try
             {
                 // Open the text file using a stream reader.
@@ -63,7 +64,7 @@ class Program {
     }
 
     static void HandleCheep(string message){
-        CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
+        CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
         DateTimeOffset localTime = DateTimeOffset.Now;
             
             Cheep cheep = new(Environment.UserName, message, localTime.ToUnixTimeSeconds());
