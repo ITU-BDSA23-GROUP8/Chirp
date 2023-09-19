@@ -43,12 +43,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 7.0.x
-
       - name: yeet
         shell: bash
         run: |
@@ -62,15 +60,12 @@ jobs:
 
           # Delete output directory
           rm -r "$release_name"
-
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
           files: "Chirp*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 
   # release:
   #   name: Release
