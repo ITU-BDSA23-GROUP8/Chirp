@@ -47,7 +47,7 @@ class Program {
     }
 
     static void HandleRead(){
-        CSVDatabase<Cheep> database = new("chirp_cli_db.csv");
+        CSVDatabase<Cheep> database = new("data/chirp_cli_db.csv");
         try
             {
                 // Open the text file using a stream reader.
