@@ -20,4 +20,4 @@ jobs:
         with:
           project: Chirp
           column: In Progress
-          repo-token: ${{ secrets.BOARD_ASSIGNMENT_WORKFLOW3 }}
+          repo-token: ${{ secrets.BOARD_ASSIGNMENT_WORKFLOW2 }}
