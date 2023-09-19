@@ -42,33 +42,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-      uses: actions/checkout@v1
+        uses: actions/checkout@v1
 
       - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 7.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
 
       - name: yeet
-      shell: bash
-      run: |
-        tag=$(git describe --tags --abbrev=0)
-        release_name="Chirp.CLI-$tag-${{ matrix.target }}"
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="Chirp.CLI-$tag-${{ matrix.target }}"
 
-        # Build everything
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+          # Build everything
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
 
-        7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
-        # Delete output directory
-        rm -r "$release_name"
+          # Delete output directory
+          rm -r "$release_name"
 
       - name: Publish
-      uses: softprops/action-gh-release@v1
-      with:
-        files: "Chirp*"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "Chirp*"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # release:
   #   name: Release
