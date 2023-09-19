@@ -20,4 +20,4 @@ jobs:
         with:
           project: ITU-BDSA23_GROUP8 Chirp
           column: In Progress
-          repo-token: ${{ secrets.BOARD_ASSIGNMENT_WORKFLOW }}
+          repo-token: ${{ secrets.BOARD_ASSIGNMENT_WORKFLOW2 }}
