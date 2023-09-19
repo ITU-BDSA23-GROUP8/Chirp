@@ -3,7 +3,7 @@ name: Publish_git
 on:
   push:
     branches:
-      - workflow
+      - workflow2.0
     tags:
       - '*'
 
