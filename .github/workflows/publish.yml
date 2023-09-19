@@ -5,7 +5,7 @@ on:
     branches:
       - workflow2.0
     tags:
-      - '*'
+      - "*"
 
 jobs:
   build:
@@ -58,7 +58,7 @@ jobs:
           release_name="Chirp.CLI-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --runtime "${{ matrix.target }}" -c Release -o "$release_name"
 
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
@@ -71,8 +71,6 @@ jobs:
           files: "Chirp*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 
   # release:
   #   name: Release
