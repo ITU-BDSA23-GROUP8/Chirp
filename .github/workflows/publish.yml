@@ -58,9 +58,9 @@ jobs:
           release_name="Chirp.CLI-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --runtime "${{ matrix.target }}" -c Release -o build src/Chirp.CLI/Chirp.CLI.csproj 
+          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --runtime "${{ matrix.target }}" -c Release -o "$release_name" -- sc
 
-          cd build
+          
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
           # Delete output directory
