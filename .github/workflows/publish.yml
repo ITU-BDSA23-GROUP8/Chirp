@@ -54,7 +54,7 @@ jobs:
       - name: yeet
         shell: bash
         run: |
-          tag=$(git describe --tags --abbrev=0)
+          tag=${{github.ref_name}} 
           release_name="Chirp.CLI-$tag-${{ matrix.target }}"
 
           # Build everything
