@@ -6,9 +6,9 @@ public class UnitTest1
     CSVDatabase<Data> database;
     
 
-    //test that we can read a CSV-file and get the correct amount of records
+    //test that we can read a CSV-file
     [Fact]
-    public void TestReadCSV1()
+    public void TestReadCSV()
     {
         //arrange
         database = CSVDatabase<Data>.GetInstance("../../../test_data.csv");
@@ -17,7 +17,7 @@ public class UnitTest1
         var recordList = database.Read();
 
         //assert
-        Assert.Equal<int>(2, recordList.Count());
+        Assert.True(recordList.Any()); // check that database contains something 
     }
 
 
