@@ -11,9 +11,10 @@ using System.CommandLine;
 
 using SimpleDB;
 
-public class Program {
+public class Program
+{
 
-    
+
     static async Task<int> Main(string[] args)
     {
         var readOption = new Option<bool>(
@@ -27,50 +28,54 @@ public class Program {
         cheepOption.AddAlias("-c");
 
         var rootCommand = new RootCommand("Chirp: write and read cheeps!");
-        
+
         rootCommand.AddOption(readOption);
         rootCommand.AddOption(cheepOption);
 
         rootCommand.SetHandler((read, cheepMsg) =>
         {
-            if(read){
+            if (read)
+            {
                 HandleRead();
             }
-            else if(cheepMsg != null){
+            else if (cheepMsg != null)
+            {
                 HandleCheep(cheepMsg);
             }
         },
         readOption, cheepOption);
 
         return await rootCommand.InvokeAsync(args);
-      
+
     }
 
-    static void HandleRead(){
+    static void HandleRead()
+    {
         CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
 
         try
-            {
-                // Open the text file using a stream reader.
-                var cheeps = database.Read();
-                UserInterface.PrintCheeps(cheeps);
-            
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
+        {
+            // Open the text file using a stream reader.
+            var cheeps = database.Read();
+            UserInterface.PrintCheeps(cheeps);
+
+        }
+        catch (IOException e)
+        {
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
+        }
     }
 
-    static void HandleCheep(string message){
+    static void HandleCheep(string message)
+    {
         CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
         DateTimeOffset localTime = DateTimeOffset.Now;
-            
-            Cheep cheep = new(Environment.UserName, message, localTime.ToUnixTimeSeconds());
-            
-            database.Store(cheep);
+
+        Cheep cheep = new(Environment.UserName, message, localTime.ToUnixTimeSeconds());
+
+        database.Store(cheep);
     }
 
-public record Cheep(string Author, string Message, long Timestamp);
+    public record Cheep(string Author, string Message, long Timestamp);
 }
