@@ -2,12 +2,20 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using static Program;
 
-static class UserInterface{
-    public static void PrintCheeps(IEnumerable<Cheep> cheeps){
+public static class UserInterface{
+
+    public static void PrintCheeps(IEnumerable<Cheep> cheeps)
+    {
         foreach (var item in cheeps)
             {
-            var time = DateTimeOffset.FromUnixTimeSeconds(item.Timestamp).LocalDateTime;
-            Console.WriteLine($"{item.Author} @ {time.ToString("MM/dd/yy HH:mm:ss")}: {item.Message}");
+            Console.WriteLine($"{item.Author} @ {times(item.Timestamp).ToString("MM/dd/yy HH:mm:ss")}: {item.Message}");
             }
     }
+
+    public static DateTimeOffset times(long unixtime)
+    {  
+        return DateTimeOffset.FromUnixTimeSeconds(unixtime).LocalDateTime;
+
+    }
+    
 }
