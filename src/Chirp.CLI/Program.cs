@@ -1,19 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-using System.IO;
-using System.Net.Security;
-using System.Text;
-using System.Text.RegularExpressions;
-using CsvHelper;
-using CsvHelper.Configuration;
-using System.CommandLine;
+﻿using System.CommandLine;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 using SimpleDB;
 
 public class Program
 {
-
 
     static async Task<int> Main(string[] args)
     {
@@ -32,15 +25,15 @@ public class Program
         rootCommand.AddOption(readOption);
         rootCommand.AddOption(cheepOption);
 
-        rootCommand.SetHandler((read, cheepMsg) =>
+        rootCommand.SetHandler(async (read, cheepMsg) =>
         {
             if (read)
             {
-                HandleRead();
+                await HandleReadAsync();
             }
             else if (cheepMsg != null)
             {
-                HandleCheep(cheepMsg);
+                await HandleCheep(cheepMsg);
             }
         },
         readOption, cheepOption);
@@ -49,14 +42,19 @@ public class Program
 
     }
 
-    static void HandleRead()
+    static async Task HandleReadAsync()
     {
-        CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
+        var baseURL = "http://localhost:5079";
+        using HttpClient client = new();
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.BaseAddress = new Uri(baseURL);
 
         try
         {
             // Open the text file using a stream reader.
-            var cheeps = database.Read();
+            var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
+
             UserInterface.PrintCheeps(cheeps);
 
         }
@@ -67,14 +65,21 @@ public class Program
         }
     }
 
-    static void HandleCheep(string message)
+    static async Task HandleCheep(string message)
     {
-        CSVDatabase<Cheep> database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
-        DateTimeOffset localTime = DateTimeOffset.Now;
+        var baseURL = "http://localhost:5079";
+        using HttpClient client = new();
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.BaseAddress = new Uri(baseURL);
 
+
+        DateTimeOffset localTime = DateTimeOffset.Now;
         Cheep cheep = new(Environment.UserName, message, localTime.ToUnixTimeSeconds());
 
-        database.Store(cheep);
+        var content = JsonContent.Create(cheep);
+        var response = await client.PostAsync("/cheep", content);
+        Console.WriteLine(response);
     }
 
     public record Cheep(string Author, string Message, long Timestamp);
