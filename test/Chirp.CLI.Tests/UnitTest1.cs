@@ -17,7 +17,7 @@ public class UnitTest1
 
         // Assert 
 
-        Assert.Equal(actualTime, "08/01/23 14:09:20");
+        Assert.Equal("08/01/23 14:09:20", actualTime);
         
 
 
