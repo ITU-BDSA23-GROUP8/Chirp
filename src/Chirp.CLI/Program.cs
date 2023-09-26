@@ -49,20 +49,11 @@ public class Program
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         client.BaseAddress = new Uri(baseURL);
+       
+        var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
 
-        try
-        {
-            // Open the text file using a stream reader.
-            var cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
+        UserInterface.PrintCheeps(cheeps);
 
-            UserInterface.PrintCheeps(cheeps);
-
-        }
-        catch (IOException e)
-        {
-            Console.WriteLine("The file could not be read:");
-            Console.WriteLine(e.Message);
-        }
     }
 
     static async Task HandleCheep(string message)
@@ -79,7 +70,6 @@ public class Program
 
         var content = JsonContent.Create(cheep);
         var response = await client.PostAsync("/cheep", content);
-        Console.WriteLine(response);
     }
 
     public record Cheep(string Author, string Message, long Timestamp);
