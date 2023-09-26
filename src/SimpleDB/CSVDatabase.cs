@@ -18,7 +18,7 @@ namespace SimpleDB;
 
     // Restrict to create object of singleton class
         
-    public CSVDatabase(string path){
+    private CSVDatabase(string path){
         if (database == null) {
             this.path=path; 
         }
