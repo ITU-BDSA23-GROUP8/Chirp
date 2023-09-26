@@ -70,7 +70,6 @@ public class Program
 
         var content = JsonContent.Create(cheep);
         var response = await client.PostAsync("/cheep", content);
-        Console.WriteLine(response);
     }
 
     public record Cheep(string Author, string Message, long Timestamp);
