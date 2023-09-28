@@ -16,5 +16,11 @@
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    
+    <None Update="..\..\data\chirp_cli_db.csv" CopyToOutputDirectory="PreserveNewest"/>
+
+  </ItemGroup>
+
 
 </Project>
