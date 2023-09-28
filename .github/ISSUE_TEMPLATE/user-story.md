@@ -11,7 +11,7 @@ assignees: ''
 
 Describe in detail what the task is supposed to include
 
--as a , I want , so that
+As a developer, I want XXXXXXX, so we XXXXXX
 
 **Acceptance criteria:**
 
