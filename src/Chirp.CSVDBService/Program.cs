@@ -10,11 +10,11 @@ IDatabaseRepository<Cheep> database;
 
 if (args[0].Equals("test"))
 {
-    database = CSVDatabase<Cheep>.GetInstance("../..//data/test_data.csv");
+    database = CSVDatabase<Cheep>.GetInstance("test_data.csv");
 }
 else
 {
-    database = CSVDatabase<Cheep>.GetInstance("../..//data/chirp_cli_db.csv");
+    database = CSVDatabase<Cheep>.GetInstance("chirp_cli_db.csv");
 }
 
 
