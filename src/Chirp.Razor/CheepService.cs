@@ -21,7 +21,7 @@ public class CheepService : ICheepService
     public List<CheepViewModel> GetCheeps()
     {
         List<CheepViewModel> finalList;
-        var sqlDBFilePath = "ChirpDB.db";
+        var sqlDBFilePath = "/tmp/chirp.db";
         var sqlQuery = @"SELECT username, text, pub_date FROM message JOIN user ON author_id = user_id ORDER by message.pub_date desc";
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
@@ -40,7 +40,7 @@ public class CheepService : ICheepService
                 var dataRecord = (IDataRecord)reader;
                 string author = (string)dataRecord[0];
                 string message = (string)dataRecord[1];
-                string timestamp = (string)dataRecord[2];
+                string timestamp = UnixTimeStampToDateTimeString(Convert.ToDouble(dataRecord[2]));
                 finalList.Add(new CheepViewModel(author,message,timestamp));
 
             }
@@ -49,10 +49,37 @@ public class CheepService : ICheepService
         return finalList;
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string user)
     {
-        // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+
+        List<CheepViewModel> finalList;
+        var sqlDBFilePath = "/tmp/chirp.db";
+        var sqlQuery = @"SELECT username, text, pub_date FROM message JOIN user ON author_id = user_id WHERE username = @user ORDER by message.pub_date desc";
+
+        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
+        {
+            connection.Open();
+            
+
+            var command = connection.CreateCommand();
+            command.CommandText = sqlQuery;
+            command.Parameters.AddWithValue("@user", user);
+
+            using var reader = command.ExecuteReader();
+            finalList = new List<CheepViewModel>();
+            while (reader.Read())
+            {
+                // https://learn.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqldatareader?view=dotnet-plat-ext-7.0#examples
+                var dataRecord = (IDataRecord)reader;
+                string author = (string)dataRecord[0];
+                string message = (string)dataRecord[1];
+                string timestamp = UnixTimeStampToDateTimeString(Convert.ToDouble(dataRecord[2]));
+                finalList.Add(new CheepViewModel(author,message,timestamp));
+
+            }
+        }
+
+        return finalList;
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
