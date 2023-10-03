@@ -6,19 +6,7 @@ using SimpleDB;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-IDatabaseRepository<Cheep> database;
-
-/*
-if (args[0].Equals("test"))
-{
-    database = CSVDatabase<Cheep>.GetInstance("test_data.csv");
-}*/
-
-    
-
-database = CSVDatabase<Cheep>.GetInstance("chirp_cli_db.csv");
-
-
+IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.GetInstance("chirp_cli_db.csv");
 
 app.MapGet("/cheeps", () =>
 {

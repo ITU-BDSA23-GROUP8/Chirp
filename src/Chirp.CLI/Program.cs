@@ -44,7 +44,7 @@ public class Program
 
     static async Task HandleReadAsync()
     {
-        var baseURL = "http://localhost:5079";
+        var baseURL = "https://bdsagroup8chirpremotedb.azurewebsites.net";
         using HttpClient client = new();
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -58,7 +58,7 @@ public class Program
 
     static async Task HandleCheep(string message)
     {
-        var baseURL = "http://localhost:5079";
+        var baseURL = "https://bdsagroup8chirpremotedb.azurewebsites.net";
         using HttpClient client = new();
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
