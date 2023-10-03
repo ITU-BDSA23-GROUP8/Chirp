@@ -8,14 +8,16 @@ var app = builder.Build();
 
 IDatabaseRepository<Cheep> database;
 
+/*
 if (args[0].Equals("test"))
 {
     database = CSVDatabase<Cheep>.GetInstance("test_data.csv");
-}
-else
-{
-    database = CSVDatabase<Cheep>.GetInstance("chirp_cli_db.csv");
-}
+}*/
+
+    
+
+database = CSVDatabase<Cheep>.GetInstance("chirp_cli_db.csv");
+
 
 
 app.MapGet("/cheeps", () =>
