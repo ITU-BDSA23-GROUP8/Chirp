@@ -35,7 +35,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             // Thread safe singleton
             lock (typeof(CSVDatabase<T>))
             {
-                var fullPath = "data/" + path;
+                var fullPath = "../SimpleDB/data/" + path;
                 if (!File.Exists(fullPath))
                 {
                     var file = File.Create(path);
