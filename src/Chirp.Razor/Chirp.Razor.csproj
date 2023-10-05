@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.11" />
   </ItemGroup>
 
+  <ItemGroup>
+  <EmbeddedResource Include="data/dump.sql" />
+  <EmbeddedResource Include="data/schema.sql" />
+</ItemGroup>
+
+
 </Project>
