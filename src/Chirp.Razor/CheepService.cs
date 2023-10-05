@@ -5,8 +5,8 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheeps(int page);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page);
 }
 
 public class CheepService : ICheepService
@@ -18,11 +18,17 @@ public class CheepService : ICheepService
             new CheepViewModel("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
         };
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int page)
     {
         List<CheepViewModel> finalList;
+        int amountOfCheeps = (page == 1 ? 0 : 32 * (page-1));
         var sqlDBFilePath = "/tmp/chirp.db";
-        var sqlQuery = @"SELECT username, text, pub_date FROM message JOIN user ON author_id = user_id ORDER by message.pub_date desc";
+        var sqlQuery = $@"SELECT username, text, pub_date 
+                        FROM message 
+                        JOIN user ON author_id = user_id 
+                        ORDER by message.pub_date desc
+                        LIMIT 32
+                        OFFSET {amountOfCheeps}";
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
         {
@@ -49,12 +55,19 @@ public class CheepService : ICheepService
         return finalList;
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string user)
+    public List<CheepViewModel> GetCheepsFromAuthor(string user, int page)
     {
 
         List<CheepViewModel> finalList;
+        int amountOfCheeps = (page == 1 ? 0 : 32 * (page-1));
         var sqlDBFilePath = "/tmp/chirp.db";
-        var sqlQuery = @"SELECT username, text, pub_date FROM message JOIN user ON author_id = user_id WHERE username = @user ORDER by message.pub_date desc";
+        var sqlQuery = $@"SELECT username, text, pub_date 
+                        FROM message 
+                        JOIN user ON author_id = user_id 
+                        WHERE username = @user 
+                        ORDER by message.pub_date desc
+                        LIMIT 32
+                        OFFSET {amountOfCheeps}";
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
         {

@@ -24,9 +24,24 @@
                 </li>
             }
         </ul>
-    }
-    else
-    {
-        <em>There are no cheeps so far.</em>
-    }
-</div>
+        
+            <ul class="pagination">
+                @if (Model.ShowPrevious)
+                {
+                    <li class="page-item">
+                        <a asp-page="/pagination" asp-route-currentpage="@(Model.CurrentPage -1)" class="page-link">Previous</a>
+                    </li>
+                }
+                @if (Model.ShowNext)
+                {
+                    <li class="page-item">
+                        <a asp-page="/pagination" asp-route-currentpage="@(Model.CurrentPage + 1)" class="page-link">Next</a>
+                    </li>
+                }
+            </ul>
+            }
+            else
+            {
+            <em>There are no cheeps so far.</em>
+            }
+        </div>
