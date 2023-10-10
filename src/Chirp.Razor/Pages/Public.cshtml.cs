@@ -15,9 +15,16 @@ public class PublicModel : PageModel
 
     public ActionResult OnGet()
     {
-        var t = Convert.ToInt32(Request.Query["page"]);
-        if (t == 0) t = 1;
-        Cheeps = _service.GetCheeps(t);
+         // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
+        // used when looking for a specific page in the url, e.g. ?page=12
+        var urlRequest = Convert.ToInt32(Request.Query["page"]);
+
+        // to start on page 1
+        if (urlRequest == 0) {
+            urlRequest = 1
+        }
+
+        Cheeps = _service.GetCheeps(urlRequest);
         return Page();
     }
 }

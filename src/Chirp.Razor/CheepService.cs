@@ -44,6 +44,7 @@ public class CheepService : ICheepService
             }
         }
         
+        // we have implemented a limit and offset of our amountOfCheeps, to calculate the correct cheeps to show on the page
         var sqlQuery = $@"SELECT username, text, pub_date 
                         FROM message 
                         JOIN user ON author_id = user_id 
