@@ -22,6 +22,7 @@ public class CheepService : ICheepService
     public List<CheepViewModel> GetCheeps(int page)
     {
         List<CheepViewModel> finalList;
+        //amountOfCheeps reads the number of cheeps when showing 32 cheeps pr page
         int amountOfCheeps = (page == 1 ? 0 : 32 * (page-1));
         
         var sqlDBFilePath = Path.GetTempPath() + "./chirp.db";
