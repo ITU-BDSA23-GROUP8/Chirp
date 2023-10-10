@@ -28,7 +28,9 @@ public class CheepService : ICheepService
                         FROM message 
                         JOIN user ON author_id = user_id 
                         ORDER by message.pub_date desc
+                        
                         LIMIT 32
+
                         OFFSET { amountOfCheeps(page)}";
 
        
