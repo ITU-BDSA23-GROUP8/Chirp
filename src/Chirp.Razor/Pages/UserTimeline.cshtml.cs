@@ -21,7 +21,7 @@ public class UserTimelineModel : PageModel
 
         // to start on page 1
         if (urlRequest == 0) {
-            urlRequest = 1
+            urlRequest = 1;
         }
 
         Cheeps = _service.GetCheepsFromAuthor(author, urlRequest);
