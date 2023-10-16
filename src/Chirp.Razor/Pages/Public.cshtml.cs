@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps { get; set; }
+    private readonly ICheepRepository _repository;
+    public List<CheepDTO> Cheeps { get; set; }
 
-    public PublicModel(ICheepService service)
+    public PublicModel(ICheepRepository repo)
     {
-        _service = service;
+        _repository = repo;
     }
 
-    public ActionResult OnGet()
+    public async Task<ActionResult> OnGet()
     {
          // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
         // used when looking for a specific page in the url, e.g. ?page=12
@@ -24,7 +25,8 @@ public class PublicModel : PageModel
             urlRequest = 1;
         }
 
-        Cheeps = _service.GetCheeps(urlRequest);
+        var cheeps = await _repository.GetCheeps(urlRequest, (urlRequest - 1) * 32);
+        Cheeps = cheeps.ToList();
         return Page();
     }
 }
