@@ -1,9 +1,9 @@
 
 
-public interface ICheepRepository (){
+public interface ICheepRepository{
+    public Task<IEnumerable<CheepDTO>> GetCheeps(int page, int offset); 
 
-
-    Task.IEnumerable<CheepDTO> GetCheeps{int pageSize = 32, int page = 0} 
-     
+    public Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string user, int page, int offset); 
+    
 
 }

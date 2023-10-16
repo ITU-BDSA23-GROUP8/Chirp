@@ -5,15 +5,15 @@ namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
-    public List<CheepViewModel> Cheeps { get; set; }
+    private readonly ICheepRepository _repository;
+    public List<CheepDTO> Cheeps { get; set; }
 
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepRepository repo)
     {
-        _service = service;
+        _repository = repo;
     }
 
-    public ActionResult OnGet(string author)
+    public async Task<ActionResult> OnGet(string author)
     {
         // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
         // used when looking for a specific page in the url, e.g. ?page=12
@@ -24,7 +24,8 @@ public class UserTimelineModel : PageModel
             urlRequest = 1;
         }
 
-        Cheeps = _service.GetCheepsFromAuthor(author, urlRequest);
+        var cheeps = await _repository.GetCheepsFromAuthor(author, urlRequest, (urlRequest - 1) * 32);
+        Cheeps = cheeps.ToList();
         return Page();
     }
 }

@@ -1,7 +1,8 @@
-public class Author(){
-    string name { get; set; }
-    string email { get; set; }
-    List <Cheep> cheeps { get; } = new();
+public class Author{
+    public int AuthorId {get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public List<Cheep>Cheeps { get; set;}
 
 
 }

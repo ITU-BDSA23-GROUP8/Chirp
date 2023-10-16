@@ -1,2 +1,2 @@
-    public record CheepDTO(string author, string message);
+public record CheepDTO(string Author, string Message, string Timestamp);
 
