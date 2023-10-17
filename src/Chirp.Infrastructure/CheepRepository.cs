@@ -59,7 +59,8 @@ public class CheepRepository : ICheepRepository
             var AuthorModel = new Author
             {
                 Name = author.Name,
-                Email = author.Email
+                Email = author.Email,
+                Cheeps = new List<Cheep>()
             };
 
             _context.Authors
@@ -77,7 +78,8 @@ public class CheepRepository : ICheepRepository
         var AuthorModel = new Author
         {
             Name = author.Name,
-            Email = author.Email
+            Email = author.Email,
+            Cheeps = new List<Cheep>()
         };
 
         var CheepModel = new Cheep
