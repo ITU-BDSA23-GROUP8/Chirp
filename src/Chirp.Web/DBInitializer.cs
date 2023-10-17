@@ -1,4 +1,7 @@
 using System;
+using Chirp.Infrastructure;
+namespace Chirp.Web;
+
 
 public static class DBInitializer
 {
