@@ -1,4 +1,4 @@
-
+namespace Chirp.Core;
 
 public interface ICheepRepository{
     public Task<IEnumerable<CheepDTO>> GetCheeps(int page, int offset); 
