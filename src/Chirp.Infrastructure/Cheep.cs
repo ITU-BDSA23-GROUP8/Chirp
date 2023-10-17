@@ -1,4 +1,6 @@
 using System.Data;
+namespace Chirp.Infrastructure;
+
 
 
 public class Cheep{
