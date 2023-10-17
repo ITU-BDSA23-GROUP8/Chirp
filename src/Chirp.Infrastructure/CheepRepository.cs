@@ -35,4 +35,61 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
+    public async Task<AuthorDTO?> GetAuthorFromName(string user)
+    {
+        return await _context.Authors
+        .Where(x => x.Name == user)
+        .Select(y => new AuthorDTO(y.Name, y.Email))
+        .FirstOrDefaultAsync();
+    }
+
+
+    public async Task<AuthorDTO?> GetAuthorFromEmail(string email)
+    {
+        return await _context.Authors
+        .Where(x => x.Email == email)
+        .Select(y => new AuthorDTO(y.Name, y.Email))
+        .FirstOrDefaultAsync();
+    }
+
+    public void CreateAuthor(AuthorDTO author)
+    {
+        if (GetAuthorFromEmail(author.Email) == null)
+        {
+            var AuthorModel = new Author
+            {
+                Name = author.Name,
+                Email = author.Email
+            };
+
+            _context.Authors
+            .Add(AuthorModel);
+            _context.SaveChanges();
+        }
+    }
+
+    public void CreateCheep(CheepDTO cheep, AuthorDTO author)
+    {
+        if (GetAuthorFromName(author.Name) == null)
+        {
+            CreateAuthor(new AuthorDTO(author.Name, author.Email));
+        }
+        var AuthorModel = new Author
+        {
+            Name = author.Name,
+            Email = author.Email
+        };
+
+        var CheepModel = new Cheep
+        {
+            Author = AuthorModel,
+            Text = cheep.Message,
+            TimeStamp = DateTime.Parse(cheep.Timestamp)
+        };
+
+        _context.Cheeps
+        .Add(CheepModel);
+        _context.SaveChanges();
+    }
+
 }
