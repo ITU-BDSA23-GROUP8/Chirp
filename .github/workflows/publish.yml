@@ -55,10 +55,10 @@ jobs:
         shell: bash
         run: |
           tag=${{github.ref_name}} 
-          release_name="Chirp.CLI-$tag-${{ matrix.target }}"
+          release_name="Chirp-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --runtime "${{ matrix.target }}" -c Release -o "$release_name" -p:DebugSymbols=false -p:DebugType=None -p:PublishSingleFile=true --self-contained false
+          dotnet publish src/Chirp.Web/Chirp.Web.csproj --runtime "${{ matrix.target }}" -c Release -o "$release_name" -p:DebugSymbols=false -p:DebugType=None -p:PublishSingleFile=true --self-contained false
 
           
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
