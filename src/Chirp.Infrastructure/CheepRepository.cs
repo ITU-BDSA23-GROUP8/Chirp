@@ -52,9 +52,9 @@ public class CheepRepository : ICheepRepository
         .FirstOrDefaultAsync();
     }
 
-    public void CreateAuthor(AuthorDTO author)
+    public async void CreateAuthor(AuthorDTO author)
     {
-        if (GetAuthorFromEmail(author.Email) == null)
+        if (await GetAuthorFromEmail(author.Email) == null)
         {
             var AuthorModel = new Author
             {
@@ -66,6 +66,8 @@ public class CheepRepository : ICheepRepository
             _context.Authors
             .Add(AuthorModel);
             _context.SaveChanges();
+        } else {
+            throw new ArgumentException("Author already exists");
         }
     }
 
