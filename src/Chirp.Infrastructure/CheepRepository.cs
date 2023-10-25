@@ -52,9 +52,9 @@ public class CheepRepository : ICheepRepository
         .FirstOrDefaultAsync();
     }
 
-    public async void CreateAuthor(AuthorDTO author)
+    public void CreateAuthor(AuthorDTO author)
     {
-        if (await GetAuthorFromEmail(author.Email) == null)
+        if (!_context.Authors.Any(e => e.Email == author.Email))
         {
             var AuthorModel = new Author
             {
@@ -73,7 +73,7 @@ public class CheepRepository : ICheepRepository
 
     public void CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
-        if (GetAuthorFromName(author.Name) == null)
+        if (!_context.Authors.Any(e => e.Email == author.Email))
         {
             CreateAuthor(new AuthorDTO(author.Name, author.Email));
         }
