@@ -35,28 +35,12 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
-    public async Task<AuthorDTO?> GetAuthorFromName(string user)
+    public async void CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
-        return await _context.Authors
-        .Where(x => x.Name == user)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
-        .FirstOrDefaultAsync();
-    }
-
-
-    public async Task<AuthorDTO?> GetAuthorFromEmail(string email)
-    {
-        return await _context.Authors
-        .Where(x => x.Email == email)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
-        .FirstOrDefaultAsync();
-    }
-
-    public void CreateAuthor(AuthorDTO author)
-    {
-        if (GetAuthorFromEmail(author.Email) == null)
+        Author AuthorModel;
+        if (!_context.Authors.Any(e => e.Email == author.Email))
         {
-            var AuthorModel = new Author
+             AuthorModel = new Author
             {
                 Name = author.Name,
                 Email = author.Email,
@@ -66,25 +50,12 @@ public class CheepRepository : ICheepRepository
             _context.Authors
             .Add(AuthorModel);
             _context.SaveChanges();
+            
         }
-    }
-
-    public void CreateCheep(CheepDTO cheep, AuthorDTO author)
-    {
-        if (GetAuthorFromName(author.Name) == null)
-        {
-            CreateAuthor(new AuthorDTO(author.Name, author.Email));
-        }
-        var AuthorModel = new Author
-        {
-            Name = author.Name,
-            Email = author.Email,
-            Cheeps = new List<Cheep>()
-        };
 
         var CheepModel = new Cheep
         {
-            Author = AuthorModel,
+            Author = await _context.Authors.FirstOrDefaultAsync(c=>c.Email == author.Email),
             Text = cheep.Message,
             TimeStamp = DateTime.Parse(cheep.Timestamp)
         };
