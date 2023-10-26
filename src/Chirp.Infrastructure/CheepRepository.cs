@@ -55,7 +55,7 @@ public class CheepRepository : ICheepRepository
 
         var CheepModel = new Cheep
         {
-            Author = await _context.Authors.FirstOrDefaultAsync(c=>c.Email == author.Email),
+            Author = await _context.Authors.FirstAsync(c=>c.Email == author.Email),
             Text = cheep.Message,
             TimeStamp = DateTime.Parse(cheep.Timestamp)
         };
