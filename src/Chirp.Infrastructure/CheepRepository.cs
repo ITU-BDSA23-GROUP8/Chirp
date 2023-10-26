@@ -35,28 +35,12 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
-    public async Task<AuthorDTO?> GetAuthorFromName(string user)
+    public void CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
-        return await _context.Authors
-        .Where(x => x.Name == user)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
-        .FirstOrDefaultAsync();
-    }
-
-
-    public async Task<AuthorDTO?> GetAuthorFromEmail(string email)
-    {
-        return await _context.Authors
-        .Where(x => x.Email == email)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
-        .FirstOrDefaultAsync();
-    }
-
-    public void CreateAuthor(AuthorDTO author)
-    {
+        Author AuthorModel;
         if (!_context.Authors.Any(e => e.Email == author.Email))
         {
-            var AuthorModel = new Author
+              AuthorModel = new Author
             {
                 Name = author.Name,
                 Email = author.Email,
@@ -66,18 +50,9 @@ public class CheepRepository : ICheepRepository
             _context.Authors
             .Add(AuthorModel);
             _context.SaveChanges();
-        } else {
-            throw new ArgumentException("Author already exists");
         }
-    }
 
-    public void CreateCheep(CheepDTO cheep, AuthorDTO author)
-    {
-        if (!_context.Authors.Any(e => e.Email == author.Email))
-        {
-            CreateAuthor(new AuthorDTO(author.Name, author.Email));
-        }
-        var AuthorModel = new Author
+         AuthorModel = new Author
         {
             Name = author.Name,
             Email = author.Email,
