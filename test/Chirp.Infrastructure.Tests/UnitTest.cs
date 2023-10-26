@@ -16,7 +16,7 @@ public class UnitTest
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         using var context = new ChirpContext(builder.Options);
         await context.Database.EnsureCreatedAsync();
-        var repository = new CheepRepository(context);
+        var repository = new AuthorRepository(context);
 
         //Act
         var author = new AuthorDTO("Aladdin", "abu@gmail.com");
@@ -24,7 +24,6 @@ public class UnitTest
         var createdAuthor = await context.Authors.SingleOrDefaultAsync(c=> c.Name == "Aladdin");
 
         //Assert 
-        // Console.WriteLine(createdAuthor.Name);
         Assert.NotNull(createdAuthor);
     }
 
@@ -37,7 +36,7 @@ public class UnitTest
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         using var context = new ChirpContext(builder.Options);
         await context.Database.EnsureCreatedAsync();
-        var repository = new CheepRepository(context);
+        var repository = new AuthorRepository(context);
 
         DBInitializer.SeedDatabase(context);
 
@@ -57,7 +56,7 @@ public class UnitTest
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         using var context = new ChirpContext(builder.Options);
         await context.Database.EnsureCreatedAsync();
-        var repository = new CheepRepository(context);
+        var repository = new AuthorRepository(context);
 
         DBInitializer.SeedDatabase(context);
 
@@ -76,7 +75,7 @@ public class UnitTest
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         using var context = new ChirpContext(builder.Options);
         await context.Database.EnsureCreatedAsync();
-        var repository = new CheepRepository(context);
+        var repository = new AuthorRepository(context);
 
         DBInitializer.SeedDatabase(context);
 
@@ -105,11 +104,77 @@ public class UnitTest
         var author = new AuthorDTO("Gaston", "belle@gmail.com");
         var cheep = new CheepDTO("Gaston", "I <3 Belle", "2023-08-01 13:14:44");
         repository.CreateCheep(cheep, author);
-        var createdAuthor = await context.Authors.FirstOrDefaultAsync(c=> c.Name == "Gaston");
-
+        var authorCount = context.Authors.Where(c=> c.Email == "belle@gmail.com").Count();
+        
         //Assert 
-        Assert.NotNull(createdAuthor);
        Assert.Contains(context.Cheeps, ch => ch.Text == "I <3 Belle");
+       Assert.Equal(1, authorCount);
+    }
+
+     [Fact]
+     public async void TestCreateCheepWithAuthor()
+    {
+        //Arrange
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var context = new ChirpContext(builder.Options);
+        await context.Database.EnsureCreatedAsync();
+        var repository = new CheepRepository(context);
+
+        DBInitializer.SeedDatabase(context);
+
+        //Act
+        var author = new AuthorDTO("Helge", "ropf@itu.dk");
+        var cheep = new CheepDTO("Helge", "Honey cookie", "2023-08-01 13:14:45");
+        repository.CreateCheep(cheep, author);
+        var authorCount = context.Authors.Where(c=> c.Email == "ropf@itu.dk").Count();
+        
+        //Assert 
+       Assert.Contains(context.Cheeps, ch => ch.Text == "Honey cookie");
+       Assert.Equal(1, authorCount);
+    }
+
+    [Fact]
+     public async void TestGetCheepsFromCertainPage()
+    {
+        //Arrange
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var context = new ChirpContext(builder.Options);
+        await context.Database.EnsureCreatedAsync();
+        var repository = new CheepRepository(context);
+
+        DBInitializer.SeedDatabase(context);
+
+        //Act
+        var list = await repository.GetCheeps(2,32);
+        var cheep = list.Any(c => c.Message == "It is asking much of it in the world.");
+        
+        //Assert 
+       Assert.True(cheep);
+    }
+
+    [Fact]
+     public async void TestGetCheepsFromCertainPageAndAuthor()
+    {
+        //Arrange
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var context = new ChirpContext(builder.Options);
+        await context.Database.EnsureCreatedAsync();
+        var repository = new CheepRepository(context);
+
+        DBInitializer.SeedDatabase(context);
+
+        //Act
+        var list = await repository.GetCheepsFromAuthor("Jacqualine Gilcoine", 2, 32);
+        var cheep = list.Any(c => c.Message == "What a relief it was the place examined.");
+        
+        //Assert 
+       Assert.True(cheep);
     }
 
 }

@@ -35,12 +35,12 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
-    public void CreateCheep(CheepDTO cheep, AuthorDTO author)
+    public async void CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
         Author AuthorModel;
         if (!_context.Authors.Any(e => e.Email == author.Email))
         {
-              AuthorModel = new Author
+             AuthorModel = new Author
             {
                 Name = author.Name,
                 Email = author.Email,
@@ -50,18 +50,12 @@ public class CheepRepository : ICheepRepository
             _context.Authors
             .Add(AuthorModel);
             _context.SaveChanges();
+            
         }
-
-         AuthorModel = new Author
-        {
-            Name = author.Name,
-            Email = author.Email,
-            Cheeps = new List<Cheep>()
-        };
 
         var CheepModel = new Cheep
         {
-            Author = AuthorModel,
+            Author = await _context.Authors.FirstOrDefaultAsync(c=>c.Email == author.Email),
             Text = cheep.Message,
             TimeStamp = DateTime.Parse(cheep.Timestamp)
         };
