@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Chirp.Infrastructure;
 using Chirp.Core;
 using Chirp.Web;
+using Microsoft.AspNetCore.Identity;
+using Chirp.Web.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,25 @@ builder.Services.AddDbContext<ChirpContext>(
     options => options.UseSqlite(conStr)
 );
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ChirpContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
+// builder.Services.AddAuthentication()
+//     .AddGitHub(o =>
+//     {
+//         o.ClientId = builder.Configuration["authentication:github:clientId"];
+//         o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+//         o.CallbackPath = "/signin-github";
+//     });
 
 var app = builder.Build();
 
