@@ -14,15 +14,16 @@
             <div>
                 <a href="/@(User.Identity.Name)">my timeline</a> |
                 <a href="/">public timeline</a> |
-                <a id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })">logout [@(User.Identity.Name)]</a>
+                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Profile" title="Manage"> @(User.Identity.Name)'s profile</a> |
+                <a id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })">logout</a>
             </div>
         }
         else
         {
             <div>
                 <a href="/">public timeline</a> |
-                <a id="register" asp-area="Identity" asp-page="/Account/Register" >register</a>
-                <a id="login" asp-area="Identity" asp-page="../Account/Login" >login</a>
+                <a id="register" asp-area="Identity" asp-page="/Account/Register" >register</a> |
+                <a id="login" asp-area="Identity" asp-page="/Account/Login" >login</a>
             </div>
         }
     </div>
