@@ -1,0 +1,21 @@
+﻿@page
+@model MyApp.Namespace.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<h1>@ViewData["Title"]</h1>
+<div>
+
+        @{
+            var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
+            IEnumerable<System.Security.Claims.Claim> claims = identity.Claims;
+            
+
+        }
+        @foreach(var claim in claims){
+            <p>
+                @claim
+            </p>
+        }
+        
+</div>
