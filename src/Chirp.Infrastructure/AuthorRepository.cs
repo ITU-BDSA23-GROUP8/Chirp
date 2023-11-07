@@ -14,8 +14,8 @@ public class AuthorRepository : IAuthorRepository
     public async Task<AuthorDTO?> GetAuthorFromName(string user)
     {
         return await _context.Authors
-        .Where(x => x.Name == user)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
+        .Where(x => x.UserName == user)
+        .Select(y => new AuthorDTO(y.UserName, y.Email))
         .FirstOrDefaultAsync();
     }
 
@@ -24,7 +24,7 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _context.Authors
         .Where(x => x.Email == email)
-        .Select(y => new AuthorDTO(y.Name, y.Email))
+        .Select(y => new AuthorDTO(y.UserName, y.Email))
         .FirstOrDefaultAsync();
     }
 
@@ -34,7 +34,7 @@ public class AuthorRepository : IAuthorRepository
         {
             var AuthorModel = new Author
             {
-                Name = author.Name,
+                UserName = author.Name,
                 Email = author.Email,
                 Cheeps = new List<Cheep>()
             };

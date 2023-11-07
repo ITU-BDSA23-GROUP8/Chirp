@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dbPath = Path.GetTempPath() + "./chirp.db";
+var dbPath = Path.GetTempPath() + "chirp.db";
 builder.Configuration["ConnectionStrings:ChirpSQlite"] = $"Data Source={dbPath}";
-//Console.WriteLine(dbPath);
+Console.WriteLine(dbPath);
 
 var conStr = builder.Configuration.GetConnectionString("ChirpSQlite");
 

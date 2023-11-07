@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Chirp.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Net.Mail;
 
 namespace Chirp.Web.Areas.Identity.Pages.Account
 {
@@ -109,11 +111,19 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                MailAddress address = new MailAddress(Input.Email);
+                string userName = address.User; 
+                
+                var user = new Author{
+                    UserName = userName,
+                    Email =Input.Email,
+                    Cheeps = new List<Cheep>() };
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

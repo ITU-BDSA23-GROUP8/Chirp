@@ -19,7 +19,7 @@ public class CheepRepository : ICheepRepository
         .OrderByDescending(c => c.TimeStamp)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ToString()))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString()))
         .ToListAsync();
 
     }
@@ -28,10 +28,10 @@ public class CheepRepository : ICheepRepository
     {
         return await _context.Cheeps
         .OrderByDescending(c => c.TimeStamp)
-        .Where(u => u.Author.Name == user)
+        .Where(u => u.Author.UserName == user)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ToString()))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString()))
         .ToListAsync();
     }
 
@@ -42,7 +42,7 @@ public class CheepRepository : ICheepRepository
         {
              AuthorModel = new Author
             {
-                Name = author.Name,
+                UserName = author.Name,
                 Email = author.Email,
                 Cheeps = new List<Cheep>()
             };
