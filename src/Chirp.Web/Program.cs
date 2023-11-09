@@ -73,4 +73,5 @@ app.MapRazorPages();
 
 app.Run();
 
+//  8be1cb9f4ec6d00c55cd6401dee0ee9f42c756e0
 public partial class Program {}
