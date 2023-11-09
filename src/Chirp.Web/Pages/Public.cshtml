@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    
 }
 
 <div>
@@ -24,6 +25,22 @@
                 </li>
             }
         </ul>
+        <td>
+            @if (Model.pageRequest >= 2)
+            {
+                <a href="/?page=@(Model.pageRequest - 1)">Previous Page</a> <span>|</span>
+            }
+            @if (Model.Cheeps.Any()) {
+                <a href="/?page=@(Model.pageRequest + 1)">Next Page</a>
+            }
+            else
+            {
+                <em>There are no more cheeps.</em>
+            }
+            
+            
+        </td>
+
     }
     else
     {
