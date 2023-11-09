@@ -18,9 +18,24 @@ public class PublicModel : PageModel
         _repository = repo;
     }
 
+
+ 
+    public async Task <IActionResult> OnPostAsync(string returnUrl = null)
+    {
+        returnUrl ??= Url.Content("~/");
+        var message = Request.Form["message"];
+
+        var author = new AuthorDTO(User.Identity.Name, User.Identity.Name);
+        var cheep = new CheepDTO(User.Identity.Name, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        _repository.CreateCheep(cheep, author);
+
+        return LocalRedirect(returnUrl);
+    }
+
+
+    
     public int pageRequest {get; set;}
-
-
+    
     public async Task<ActionResult> OnGet()
     {
          // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
