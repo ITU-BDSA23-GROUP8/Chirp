@@ -18,7 +18,7 @@ builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddDbContext<ChirpContext>(
-    options => options.UseSqlite(conStr)
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
 );
 
 builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ChirpContext>();
@@ -73,5 +73,5 @@ app.MapRazorPages();
 
 app.Run();
 
-public partial class Program {}
+public partial class Program { }
 
