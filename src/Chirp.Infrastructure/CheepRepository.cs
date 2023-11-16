@@ -35,7 +35,7 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
-    public async void CreateCheep(CheepDTO cheep, AuthorDTO author)
+    public async Task CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
         Author AuthorModel;
         if (!_context.Authors.Any(e => e.Email == author.Email))
@@ -49,7 +49,7 @@ public class CheepRepository : ICheepRepository
 
             _context.Authors
             .Add(AuthorModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             
         }
 
@@ -62,7 +62,7 @@ public class CheepRepository : ICheepRepository
 
         _context.Cheeps
         .Add(CheepModel);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
 }

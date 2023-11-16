@@ -27,7 +27,7 @@ public class PublicModel : PageModel
 
         var author = new AuthorDTO(User.Identity.Name, User.Identity.Name);
         var cheep = new CheepDTO(User.Identity.Name, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-        _repository.CreateCheep(cheep, author);
+        await _repository.CreateCheep(cheep, author);
 
         return LocalRedirect(returnUrl);
     }

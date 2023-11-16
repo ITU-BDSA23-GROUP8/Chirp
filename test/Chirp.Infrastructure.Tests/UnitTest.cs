@@ -21,7 +21,7 @@ public class UnitTest
         //Act
         var author = new AuthorDTO("Aladdin", "abu@gmail.com");
         repository.CreateAuthor(author);
-        var createdAuthor = await context.Authors.SingleOrDefaultAsync(c=> c.Name == "Aladdin");
+        var createdAuthor = await context.Authors.SingleOrDefaultAsync(c=> c.UserName == "Aladdin");
 
         //Assert 
         Assert.NotNull(createdAuthor);
