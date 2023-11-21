@@ -475,3 +475,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Store Local SQL database
+src/Chirp.Web/appsettings.Development.json
