@@ -7,12 +7,6 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dbPath = Path.GetTempPath() + "chirp.db";
-builder.Configuration["ConnectionStrings:ChirpSQlite"] = $"Data Source={dbPath}";
-
-Console.WriteLine(dbPath);
-
-var conStr = builder.Configuration.GetConnectionString("ChirpSQlite");
 
 // Add services to the container.
 builder.Services.AddRazorPages();

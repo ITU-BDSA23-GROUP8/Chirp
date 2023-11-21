@@ -19,7 +19,7 @@ public class CheepRepository : ICheepRepository
         .OrderByDescending(c => c.TimeStamp)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString()))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
         .ToListAsync();
 
     }
@@ -31,7 +31,7 @@ public class CheepRepository : ICheepRepository
         .Where(u => u.Author.UserName == user)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString()))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
         .ToListAsync();
     }
 
