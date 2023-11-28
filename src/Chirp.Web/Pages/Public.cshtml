@@ -34,9 +34,9 @@
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @if(User.Identity.IsAuthenticated && cheep.Author != User.Identity.Name){
-                            if(Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.Author, cheep.Author))){
+                            @if(Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.Author, cheep.Author))){
                                 <form method="post" asp-page-handler="UnFollow" style="display: inline;">
-                                    <button  type="submit" name="Author" value="@cheep.Author"> Unfollow </button>
+                                    <button  type="submit" name="Author" value="@cheep.Author" > Unfollow </button>
 
                                 </form>
                             }else{

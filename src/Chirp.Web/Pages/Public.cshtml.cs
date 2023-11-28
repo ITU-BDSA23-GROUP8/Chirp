@@ -64,8 +64,12 @@ public class PublicModel : PageModel
     {
         var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
         var author = new AuthorDTO(Author, Author);
+        Console.WriteLine();
+        Console.WriteLine("name: " + current.Name + ", author: " + Author);
         _authorrepository.Follow(author, current);
-
+        var clara =  await _authorrepository.IsFollowing(author, current);
+        Console.Write(clara);
+        Console.WriteLine();
         return RedirectToPage();
     }
     public async Task<IActionResult> OnPostUnFollow(string Author)

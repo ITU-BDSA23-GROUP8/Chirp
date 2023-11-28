@@ -54,8 +54,8 @@ public class AuthorRepository : IAuthorRepository
     public void Follow(AuthorDTO author, AuthorDTO follower)
     {
 
-        var authorModel = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
-        var followerModel = _context.Authors.FirstOrDefault(b => b.Email == follower.Email);
+        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
+        var followerModel = _context.Authors.FirstOrDefault(b => b.UserName == follower.Name);
 
         if (authorModel != null && followerModel != null)
         {
@@ -72,8 +72,8 @@ public class AuthorRepository : IAuthorRepository
 
     public void UnFollow(AuthorDTO author, AuthorDTO follower)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
-        var followerModel = _context.Authors.FirstOrDefault(b => b.Email == follower.Email);
+        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
+        var followerModel = _context.Authors.FirstOrDefault(b => b.UserName == follower.Name);
 
         if (authorModel != null && followerModel != null)
         {
@@ -88,7 +88,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<List<AuthorDTO>> GetFollowers(AuthorDTO author)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
+        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
         var followers = new List<AuthorDTO>();
         foreach (var follower in authorModel.Followers)
         {
@@ -99,7 +99,7 @@ public class AuthorRepository : IAuthorRepository
     }
     public async Task<List<AuthorDTO>> GetFollowing(AuthorDTO author)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
+        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
         var following = new List<AuthorDTO>();
         foreach (var follower in authorModel.Following)
         {
