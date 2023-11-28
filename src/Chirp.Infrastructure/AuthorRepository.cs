@@ -38,9 +38,7 @@ public class AuthorRepository : IAuthorRepository
             {
                 UserName = author.Name,
                 Email = author.Email,
-                Cheeps = new List<Cheep>(),
-                Followers = new List<Author>(),
-                Following = new List<Author>()
+                Cheeps = new List<Cheep>()
             };
 
             _context.Authors
@@ -57,9 +55,9 @@ public class AuthorRepository : IAuthorRepository
         var followerModel = _context.Authors.FirstOrDefault(b => b.Email == follower.Email);
 
         if(authorModel != null && followerModel != null){
-            if(!authorModel.Following.Contains(followerModel)){
-                authorModel.Following.Add(followerModel);
-                followerModel.Followers.Add(authorModel);
+            if(!authorModel.Followers.Contains(followerModel)){
+                authorModel.Followers.Add(followerModel);
+                followerModel.Following.Add(authorModel);
             }
             _context.SaveChanges();
         }
@@ -72,9 +70,9 @@ public class AuthorRepository : IAuthorRepository
         var followerModel = _context.Authors.FirstOrDefault(b => b.Email == follower.Email);
 
         if(authorModel != null && followerModel != null){
-            if(authorModel.Following.Contains(followerModel)){
-                authorModel.Following.Remove(followerModel);
-                followerModel.Followers.Remove(authorModel);
+            if(authorModel.Followers.Contains(followerModel)){
+                authorModel.Followers.Remove(followerModel);
+                followerModel.Following.Remove(authorModel);
             }
             _context.SaveChanges();
         }
