@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 builder.Services.AddTransient<ICheepRepository, CheepRepository>();
+builder.Services.AddTransient<IAuthorRepository, AuthorRepository>();
 builder.Services.AddDbContext<ChirpContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
 );
