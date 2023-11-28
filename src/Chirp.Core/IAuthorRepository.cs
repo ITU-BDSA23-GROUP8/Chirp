@@ -9,5 +9,16 @@ public interface IAuthorRepository
 
     public void CreateAuthor(AuthorDTO author);
 
+    public void Follow(AuthorDTO author, AuthorDTO follower);
+
+    public void UnFollow(AuthorDTO author, AuthorDTO follower);
+
+    public Task<List<AuthorDTO>> GetFollowers(AuthorDTO author);
+
+    public Task<List<AuthorDTO>> GetFollowing(AuthorDTO author);
+
+    
+
+
 
 }

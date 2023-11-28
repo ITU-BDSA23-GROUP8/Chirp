@@ -44,7 +44,9 @@ public class CheepRepository : ICheepRepository
             {
                 UserName = author.Name,
                 Email = author.Email,
-                Cheeps = new List<Cheep>()
+                Cheeps = new List<Cheep>(),
+                Followers = new List<Author>(),
+                Following = new List<Author>()
             };
 
             _context.Authors
