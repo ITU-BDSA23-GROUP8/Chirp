@@ -64,14 +64,15 @@ public class PublicModel : PageModel
     {
         var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
         var author = new AuthorDTO(AuthorName, AuthorEmail);
-        _authorrepository.Follow(author, current);
+        await _authorrepository.Follow(author, current);
         return RedirectToPage("/Public");
     }
     public async Task<IActionResult> OnPostUnFollow(string AuthorName, string AuthorEmail)
     {
         var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
         var author = new AuthorDTO(AuthorName, AuthorEmail);
-        _authorrepository.UnFollow(author, current);
+        Console.WriteLine("unfollow is called");
+        await _authorrepository.UnFollow(author, current);
 
         return RedirectToPage("/Public");
     }

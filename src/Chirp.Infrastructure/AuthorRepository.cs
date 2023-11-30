@@ -51,7 +51,7 @@ public class AuthorRepository : IAuthorRepository
         }
     }
 
-    public void Follow(AuthorDTO author, AuthorDTO follower)
+    public async Task Follow(AuthorDTO author, AuthorDTO follower)
     {
 
         var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
@@ -63,34 +63,42 @@ public class AuthorRepository : IAuthorRepository
             {
                 authorModel.Followers.Add(followerModel);
                 followerModel.Following.Add(authorModel);
+                
             }
-            _context.SaveChanges();
+
         }
+        await _context.SaveChangesAsync();
 
 
     }
 
-    public void UnFollow(AuthorDTO author, AuthorDTO follower)
+    public async Task UnFollow(AuthorDTO author, AuthorDTO follower)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
-        var followerModel = _context.Authors.FirstOrDefault(b => b.UserName == follower.Name);
+        var authorModel = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == author.Name);
+        var followerModel = await _context.Authors.FirstOrDefaultAsync(b => b.UserName == follower.Name);
 
         if (authorModel != null && followerModel != null)
         {
-            if (authorModel.Followers.Contains(followerModel))
+            Console.WriteLine("first if");
+            var isFollow = await IsFollowing(author, follower);
+            if (isFollow)
             {
+                Console.WriteLine("second if");
                 authorModel.Followers.Remove(followerModel);
                 followerModel.Following.Remove(authorModel);
+                await _context.SaveChangesAsync();
             }
-            _context.SaveChanges();
+            
         }
+        
     }
 
     public async Task<List<AuthorDTO>> GetFollowers(AuthorDTO author)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
+        var list = await _context.Authors.Where(x => x.Following.Any(y => y.Email == author.Email)).ToListAsync();
+        
         var followers = new List<AuthorDTO>();
-        foreach (var follower in authorModel.Followers)
+        foreach (var follower in list)
         {
             followers.Add(new AuthorDTO(follower.UserName, follower.Email));
         }
@@ -99,9 +107,11 @@ public class AuthorRepository : IAuthorRepository
     }
     public async Task<List<AuthorDTO>> GetFollowing(AuthorDTO author)
     {
-        var authorModel = _context.Authors.FirstOrDefault(a => a.UserName == author.Name);
+        var list = await _context.Authors.Where(x => x.Followers.Any(y => y.Email == author.Email)).ToListAsync();
+
         var following = new List<AuthorDTO>();
-        foreach (var follower in authorModel.Following)
+
+        foreach (var follower in list)
         {
             following.Add(new AuthorDTO(follower.UserName, follower.Email));
         }
@@ -111,9 +121,9 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> IsFollowing(AuthorDTO author, AuthorDTO follower)
     {
-        var list = await GetFollowers(author);
+        var list = await GetFollowing(follower);
 
-        return list.Contains(follower);
+        return list.Contains(author);
     }
 
 
