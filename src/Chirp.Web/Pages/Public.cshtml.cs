@@ -29,7 +29,7 @@ public class PublicModel : PageModel
         var message = Request.Form["message"];
 
         var author = new AuthorDTO(User.Identity.Name, User.Identity.Name);
-        var cheep = new CheepDTO(User.Identity.Name, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        var cheep = new CheepDTO(User.Identity.Name, User.Identity.Name, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         await _cheeprepository.CreateCheep(cheep, author);
 
         return LocalRedirect(returnUrl);
@@ -60,24 +60,19 @@ public class PublicModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostFollow(string Author)
+    public async Task<IActionResult> OnPostFollow(string AuthorName, string AuthorEmail)
     {
         var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
-        var author = new AuthorDTO(Author, Author);
-        Console.WriteLine();
-        Console.WriteLine("name: " + current.Name + ", author: " + Author);
+        var author = new AuthorDTO(AuthorName, AuthorEmail);
         _authorrepository.Follow(author, current);
-        var clara =  await _authorrepository.IsFollowing(author, current);
-        Console.Write(clara);
-        Console.WriteLine();
-        return RedirectToPage();
+        return RedirectToPage("/Public");
     }
-    public async Task<IActionResult> OnPostUnFollow(string Author)
+    public async Task<IActionResult> OnPostUnFollow(string AuthorName, string AuthorEmail)
     {
         var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
-        var author = new AuthorDTO(Author, Author);
+        var author = new AuthorDTO(AuthorName, AuthorEmail);
         _authorrepository.UnFollow(author, current);
 
-        return RedirectToPage();
+        return RedirectToPage("/Public");
     }
 }
