@@ -74,8 +74,8 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task UnFollow(AuthorDTO author, AuthorDTO follower)
     {
-        var authorModel = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == author.Name);
-        var followerModel = await _context.Authors.FirstOrDefaultAsync(b => b.UserName == follower.Name);
+        var authorModel = await _context.Authors.Include(a => a.Followers).FirstOrDefaultAsync(a => a.UserName == author.Name);
+        var followerModel = await _context.Authors.Include(a => a.Following).FirstOrDefaultAsync(b => b.UserName == follower.Name);
 
         if (authorModel != null && followerModel != null)
         {
@@ -86,10 +86,9 @@ public class AuthorRepository : IAuthorRepository
                 Console.WriteLine("second if");
                 authorModel.Followers.Remove(followerModel);
                 followerModel.Following.Remove(authorModel);
-                await _context.SaveChangesAsync();
             }
-            
         }
+        await _context.SaveChangesAsync();
         
     }
 
