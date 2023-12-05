@@ -12,7 +12,7 @@ public class UserTimelineModel : PageModel
     private readonly IAuthorRepository _authorrepository;
     public required List<CheepDTO> Cheeps { get; set; }
 
-    public List<AuthorDTO> Following {get; set;} 
+    public List<AuthorDTO> Following { get; set; }
 
     public UserTimelineModel(ICheepRepository repo, IAuthorRepository authorrepo)
     {
@@ -20,27 +20,45 @@ public class UserTimelineModel : PageModel
         _authorrepository = authorrepo;
     }
 
-    public int pageRequest {get; set;}
+    public int pageRequest { get; set; }
     public async Task<ActionResult> OnGet(string author)
     {
-        
-        
+
+
         // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
         // used when looking for a specific page in the url, e.g. ?page=12
         pageRequest = Convert.ToInt32(Request.Query["page"]);
 
         // to start on page 1
-        if (pageRequest == 0) {
+        if (pageRequest == 0)
+        {
             pageRequest = 1;
         }
 
-        var cheeps = await _repository.GetCheepsFromAuthor(author, pageRequest, (pageRequest - 1) * 32);
-        Cheeps = cheeps.ToList();
 
-        if (User.Identity.IsAuthenticated){
+
+        if (User.Identity.IsAuthenticated)
+        {
             var following = await _authorrepository.GetFollowing(new AuthorDTO(User.Identity.Name, User.Identity.Name));
             Following = following.ToList();
+
+            if (User.Identity.Name.Equals(author))
+            {
+                var cheeps = await _repository.GetCheepsFromFollowing(User.Identity.Name, pageRequest, (pageRequest - 1) * 32);
+                Cheeps = cheeps.ToList();
+            }
+            else
+            {
+                var cheeps = await _repository.GetCheepsFromAuthor(author, pageRequest, (pageRequest - 1) * 32);
+                Cheeps = cheeps.ToList();
+            }
         }
+        else
+        {
+            var cheeps = await _repository.GetCheepsFromAuthor(author, pageRequest, (pageRequest - 1) * 32);
+            Cheeps = cheeps.ToList();
+        }
+
 
         return Page();
     }
