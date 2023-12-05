@@ -35,6 +35,27 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
+
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromFollowing(string user, int page, int offset) {
+        var list = await GetCheepsFromAuthor(user, page, offset);
+
+        var followingList = await _context.Authors
+        .Where(x => x.Followers.Any(y => y.Email == user))
+        .ToListAsync();
+
+        foreach (var author in followingList)
+        {
+            Console.WriteLine("we are in the for-loop");
+            list = list.Concat(author.Cheeps.Select(c => new CheepDTO(author.UserName, author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))); 
+            Console.WriteLine(list);
+        }
+
+        return list
+        .OrderBy(d => d.Timestamp)
+        .Skip(offset)
+        .Take(32);
+    }
+
     public async Task CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
         Author AuthorModel;

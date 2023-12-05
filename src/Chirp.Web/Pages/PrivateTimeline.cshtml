@@ -1,0 +1,71 @@
+﻿@page "/private"
+@model Chirp.Razor.Pages.PrivateTimelineModel
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+    var routeName = HttpContext.GetRouteValue("author");
+}
+
+<div>
+    <h2> My timeline </h2>
+
+    @if (Model.Cheeps.Any())
+    {
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
+                        </strong>
+                        @if(User.Identity.IsAuthenticated && cheep.AuthorName != User.Identity.Name){
+                            @if(Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.AuthorName, cheep.AuthorEmail))){
+                                <form method="post" asp-page-handler="UnFollow" style="display: inline;">
+                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName" >
+                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Unfollow </button>
+
+                                </form>
+                            }else{
+                                 <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName">
+                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Follow </button>
+
+                                </form>
+                            }
+                        }
+                    </p>
+                    <p>@cheep.Message</p>
+                    <small>&mdash; @cheep.Timestamp</small>
+                </li>
+            }
+        </ul>
+        
+        <td>
+            
+            @if (Model.pageRequest >= 2)
+            {
+                
+                <a href="/@routeName/?page=@(Model.pageRequest - 1)">Previous Page</a> <span>|</span>
+                
+            }
+            @if (Model.Cheeps.Any()) {
+                <a href="/@routeName/?page=@(Model.pageRequest + 1)">Next Page</a>
+            }
+            else
+            {
+                <em>There are no more cheeps.</em>
+            }
+            
+            
+        </td>
+
+    }
+    else
+    {
+        <em>There are no cheeps so far.</em>
+    }
+</div>
+
+
+

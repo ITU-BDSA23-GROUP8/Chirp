@@ -79,11 +79,11 @@ public class AuthorRepository : IAuthorRepository
 
         if (authorModel != null && followerModel != null)
         {
-            Console.WriteLine("first if");
+            
             var isFollow = await IsFollowing(author, follower);
             if (isFollow)
             {
-                Console.WriteLine("second if");
+               
                 authorModel.Followers.Remove(followerModel);
                 followerModel.Following.Remove(authorModel);
             }
@@ -94,7 +94,11 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<List<AuthorDTO>> GetFollowers(AuthorDTO author)
     {
-        var list = await _context.Authors.Where(x => x.Following.Any(y => y.Email == author.Email)).ToListAsync();
+        var list = await _context.Authors
+        .Where(x => x.Following.Any(y => y.Email == author.Email))
+        .ToListAsync();
+
+        
         
         var followers = new List<AuthorDTO>();
         foreach (var follower in list)

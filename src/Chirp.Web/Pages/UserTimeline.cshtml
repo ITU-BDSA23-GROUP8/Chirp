@@ -19,9 +19,24 @@
                         <strong>
                             <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
-                        @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
+                        @if(User.Identity.IsAuthenticated && cheep.AuthorName != User.Identity.Name){
+                            @if(Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.AuthorName, cheep.AuthorEmail))){
+                                <form method="post" asp-page-handler="UnFollow" style="display: inline;">
+                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName" >
+                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Unfollow </button>
+
+                                </form>
+                            }else{
+                                 <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName">
+                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Follow </button>
+
+                                </form>
+                            }
+                        }
                     </p>
+                    <p>@cheep.Message</p>
+                    <small>&mdash; @cheep.Timestamp</small>
                 </li>
             }
         </ul>
