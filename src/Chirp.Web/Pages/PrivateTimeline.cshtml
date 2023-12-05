@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("author");
 }
 
 <div>
@@ -46,11 +45,11 @@
             @if (Model.pageRequest >= 2)
             {
                 
-                <a href="/@routeName/?page=@(Model.pageRequest - 1)">Previous Page</a> <span>|</span>
+                <a href="/private/?page=@(Model.pageRequest - 1)">Previous Page</a> <span>|</span>
                 
             }
             @if (Model.Cheeps.Any()) {
-                <a href="/@routeName/?page=@(Model.pageRequest + 1)">Next Page</a>
+                <a href="/private/?page=@(Model.pageRequest + 1)">Next Page</a>
             }
             else
             {
