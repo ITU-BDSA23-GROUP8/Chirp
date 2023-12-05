@@ -36,7 +36,8 @@ public class CheepRepository : ICheepRepository
     }
 
 
-    public async Task<IEnumerable<CheepDTO>> GetCheepsFromFollowing(string user, int page, int offset) {
+    public async Task<IEnumerable<CheepDTO>> GetCheepsFromFollowing(string user, int page, int offset)
+    {
         var list = await GetCheepsFromAuthor(user, page, offset);
 
         var followingList = await _context.Authors
@@ -45,13 +46,12 @@ public class CheepRepository : ICheepRepository
 
         foreach (var author in followingList)
         {
-            Console.WriteLine("we are in the for-loop");
-            list = list.Concat(author.Cheeps.Select(c => new CheepDTO(author.UserName, author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))); 
-            Console.WriteLine(list);
+            var cheeplist = await GetCheepsFromAuthor(author.UserName, page, offset);
+            list = list.Concat(cheeplist);
         }
 
         return list
-        .OrderBy(d => d.Timestamp)
+        .OrderByDescending(d => d.Timestamp)
         .Skip(offset)
         .Take(32);
     }
@@ -61,7 +61,7 @@ public class CheepRepository : ICheepRepository
         Author AuthorModel;
         if (!_context.Authors.Any(e => e.Email == author.Email))
         {
-             AuthorModel = new Author
+            AuthorModel = new Author
             {
                 UserName = author.Name,
                 Email = author.Email,
@@ -71,12 +71,12 @@ public class CheepRepository : ICheepRepository
             _context.Authors
             .Add(AuthorModel);
             await _context.SaveChangesAsync();
-            
+
         }
 
         var CheepModel = new Cheep
         {
-            Author = await _context.Authors.FirstAsync(c=>c.Email == author.Email),
+            Author = await _context.Authors.FirstAsync(c => c.Email == author.Email),
             Text = cheep.Message,
             TimeStamp = DateTime.Parse(cheep.Timestamp)
         };
