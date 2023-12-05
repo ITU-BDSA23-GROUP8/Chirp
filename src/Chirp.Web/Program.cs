@@ -17,7 +17,7 @@ builder.Services.AddDbContext<ChirpContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
 );
 
-builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ChirpContext>();
+builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ChirpContext>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings
