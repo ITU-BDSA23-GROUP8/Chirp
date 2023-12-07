@@ -35,15 +35,21 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
+    public async Task<IEnumerable<CheepDTO>> GetAllCheepsFromAuthor(string user)
+    {
+        return await _context.Cheeps
+        .OrderByDescending(c => c.TimeStamp)
+        .Where(u => u.Author.UserName == user)
+        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
+        .ToListAsync();
+    }
+
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromFollowing(string user, int page, int offset)
     {
-        
-        var list = await _context.Cheeps
-                        .OrderByDescending(c => c.TimeStamp)
-                        .Where(u => u.Author.UserName == user)
-                        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
-                        .ToListAsync();
+
+        var ownCheeps = await GetAllCheepsFromAuthor(user);
+        var finalList = ownCheeps.ToList();
 
         var followingList = await _context.Authors
         .Where(x => x.Followers.Any(y => y.Email == user))
@@ -52,15 +58,12 @@ public class CheepRepository : ICheepRepository
         foreach (var author in followingList)
         {
             //var cheeplist = await GetCheepsFromAuthor(user, page, offset);
-            var cheeplist = await _context.Cheeps
-                        .OrderByDescending(c => c.TimeStamp)
-                        .Where(u => u.Author.UserName == author.UserName)
-                        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
-                        .ToListAsync();
-            list.AddRange(cheeplist);
+            var followingCheeps = await GetAllCheepsFromAuthor(author.UserName!);
+            var cheeplist = followingCheeps.ToList();
+            finalList.AddRange(cheeplist);
         }
 
-        return list
+        return finalList
         .OrderByDescending(d => d.Timestamp)
         .Skip(offset)
         .Take(32);

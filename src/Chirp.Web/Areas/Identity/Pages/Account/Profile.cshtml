@@ -1,21 +1,48 @@
 ﻿@page
 @model MyApp.Namespace.ProfileModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "About me";
 }
 <h1>@ViewData["Title"]</h1>
 <div>
+    <h2>Profile info</h2>
+    <ul>
+        <li>Name: @Model.Name</li>
+        <li>Email: @Model.Email</li>
+    </ul>
 
-        @{
-            var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
-            IEnumerable<System.Security.Claims.Claim> claims = identity.Claims;
-            
+    <h2>Following</h2>
+    @if (Model.Following.Any())
+    {
+        <ul>
+            @foreach (var author in Model.Following)
+            {
+                <li>
+                    <a href="/@author.Name">@author.Name</a>
+                </li>
+            }
 
-        }
-        @foreach(var claim in claims){
-            <p>
-                @claim
-            </p>
-        }
-        
+        </ul>
+    } else {
+        <p>You do not follow anyone.</p>
+    }
+
+    <h2>Your cheeps</h2>
+    <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
+                        </strong>
+                    </p>
+                    <p>@cheep.Message</p>
+                    <small>&mdash; @cheep.Timestamp</small>
+                </li>
+            }
+        </ul>
+
+
+
 </div>
