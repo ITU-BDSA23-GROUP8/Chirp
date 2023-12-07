@@ -22,6 +22,21 @@ namespace Chirp.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.Property<int>("FollowersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FollowersId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("AuthorAuthor");
+                });
+
             modelBuilder.Entity("Chirp.Infrastructure.Author", b =>
                 {
                     b.Property<int>("Id")
@@ -251,6 +266,21 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.HasOne("Chirp.Infrastructure.Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Infrastructure.Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Chirp.Infrastructure.Cheep", b =>
