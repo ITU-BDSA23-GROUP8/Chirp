@@ -4,6 +4,8 @@ using Chirp.Infrastructure;
 using Chirp.Core;
 using Chirp.Web;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,9 @@ builder.Services.AddAuthentication()
         o.ClientId = builder.Configuration["authentication:github:clientId"];
         o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
         o.CallbackPath = "/signin-github";
+        o.Scope.Add("user:email");
+        o.ClaimActions.MapJsonKey(ClaimTypes.Name, "username");
+        o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
     });
 
 var app = builder.Build();
@@ -64,6 +69,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCookiePolicy(new CookiePolicyOptions()
+{
+    MinimumSameSitePolicy = SameSiteMode.Lax
+});
 
 app.MapRazorPages();
 
