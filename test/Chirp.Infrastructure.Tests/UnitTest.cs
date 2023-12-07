@@ -102,7 +102,7 @@ public class UnitTest
 
         //Act
         var author = new AuthorDTO("Gaston", "belle@gmail.com");
-        var cheep = new CheepDTO("Gaston", "I <3 Belle", "2023-08-01 13:14:44");
+        var cheep = new CheepDTO("Gaston", "belle@gmail.com", "I <3 Belle", "2023-08-01 13:14:44");
         repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "belle@gmail.com").Count();
 
@@ -126,7 +126,7 @@ public class UnitTest
 
         //Act
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
-        var cheep = new CheepDTO("Helge", "Honey cookie", "2023-08-01 13:14:45");
+        var cheep = new CheepDTO("Helge","ropf@itu.dk", "Honey cookie", "2023-08-01 13:14:45");
         repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "ropf@itu.dk").Count();
 
@@ -261,10 +261,10 @@ public class UnitTest
         context.Authors.Add(per);
         context.Authors.Add(jens);
 
-        context.SaveChanges();
-
         per.Followers.Add(jens);
         jens.Following.Add(per);
+
+        context.SaveChanges();
 
         var list = await repository.GetFollowers(new AuthorDTO(per.UserName, per.Email));
 
@@ -303,10 +303,10 @@ public class UnitTest
         context.Authors.Add(per);
         context.Authors.Add(jens);
 
-        context.SaveChanges();
-
         per.Followers.Add(jens);
         jens.Following.Add(per);
+
+        context.SaveChanges();
 
         var list = await repository.GetFollowing(new AuthorDTO(jens.UserName, jens.Email));
 
