@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace Chirp.Web.Areas.Identity.Pages.Account
@@ -23,6 +24,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         {
             _signInManager = signInManager;
             _logger = logger;
+        }
+
+        public async Task OnGetAsync(string returnUrl = null)
+        {
+            
+
+            
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)

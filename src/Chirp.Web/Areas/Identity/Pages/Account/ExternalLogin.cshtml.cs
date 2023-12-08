@@ -81,7 +81,7 @@ public class ExternalLoginModel : PageModel
             await _signInManager.SignInAsync(user, props, info.LoginProvider);
 
             _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-            return LocalRedirect(returnUrl);
+            return RedirectToPage("/Public");
         }
         if (result.IsLockedOut)
         {
