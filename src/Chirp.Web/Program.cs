@@ -37,7 +37,7 @@ builder.Services.AddAuthentication()
         o.ClientId = builder.Configuration["authentication:github:clientId"];
         o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
         o.CallbackPath = "/signin-github";
-        o.Scope.Add("user:email");
+        o.Scope.Add("user:email"); // important to get read access to email from GitHub
         o.ClaimActions.MapJsonKey(ClaimTypes.Name, "username");
         o.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
     });

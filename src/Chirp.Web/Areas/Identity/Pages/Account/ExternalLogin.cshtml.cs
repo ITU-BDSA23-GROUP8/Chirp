@@ -112,7 +112,7 @@ public class ExternalLoginModel : PageModel
             var user = new Author
             {
                 UserName = "name",
-                Email = "email",
+                Email = "mail",
                 Cheeps = new List<Cheep>()
             };
 
@@ -132,11 +132,9 @@ public class ExternalLoginModel : PageModel
                     user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
                 }
-                /*
-                foreach (var item in info.Principal.Claims)
-                {
-                    Console.WriteLine(item.Type + " " + item.ValueType + " " + item.Value);
-                }*/
+                if (user.UserName!.Equals("name") || user.Email!.Equals("mail")){
+                    throw new ApplicationException("Error loading user information from external login.");
+                }
 
                 createResult = await _userManager.AddLoginAsync(user, info);
                 if (createResult.Succeeded)
@@ -148,7 +146,7 @@ public class ExternalLoginModel : PageModel
 
                     await _signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
                     _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                    return RedirectToPage();
+                    return RedirectToPage("/Public");
                 }
             }
             foreach (var error in createResult.Errors)
@@ -158,7 +156,7 @@ public class ExternalLoginModel : PageModel
         }
 
         ReturnUrl = returnUrl;
-        return Page();
+        return RedirectToPage("/Public");
         }
     }
 

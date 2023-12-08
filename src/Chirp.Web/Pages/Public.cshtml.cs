@@ -5,6 +5,8 @@ using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chirp.Razor.Pages;
 
@@ -28,9 +30,13 @@ public class PublicModel : PageModel
         returnUrl ??= Url.Content("~/");
         var message = Request.Form["message"];
 
-        var author = new AuthorDTO(User.Identity.Name, User.Identity.Name);
-        var cheep = new CheepDTO(User.Identity.Name, User.Identity.Name, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-        await _cheeprepository.CreateCheep(cheep, author);
+        if (!message.IsNullOrEmpty()){
+            var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            var author = new AuthorDTO(userName, userEmail);
+            var cheep = new CheepDTO(userName, userEmail, message!, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            await _cheeprepository.CreateCheep(cheep, author);
+        }
 
         return LocalRedirect(returnUrl);
     }
@@ -52,7 +58,10 @@ public class PublicModel : PageModel
         var cheeps = await _cheeprepository.GetCheeps(pageRequest, (pageRequest - 1) * 32);
         Cheeps = cheeps.ToList();
         if (User.Identity.IsAuthenticated){
-            var following = await _authorrepository.GetFollowing(new AuthorDTO(User.Identity.Name, User.Identity.Name));
+            var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+            var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
             Following = following.ToList();
         }
 
@@ -62,14 +71,19 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPostFollow(string AuthorName, string AuthorEmail)
     {
-        var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+        Console.WriteLine("follow called: author is " + userName + " " + userEmail);
+        var current = new AuthorDTO(userName, userEmail);
         var author = new AuthorDTO(AuthorName, AuthorEmail);
         await _authorrepository.Follow(author, current);
         return RedirectToPage();
     }
     public async Task<IActionResult> OnPostUnFollow(string AuthorName, string AuthorEmail)
     {
-        var current = new AuthorDTO(User.Identity.Name, User.Identity.Name);
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+        var current = new AuthorDTO(userName, userEmail);
         var author = new AuthorDTO(AuthorName, AuthorEmail);
         await _authorrepository.UnFollow(author, current);
 
