@@ -103,11 +103,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         }
 
 
-        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null)
         {
-            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties("GitHub", redirectUrl);
-            return new ChallengeResult("GitHub", properties);
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
