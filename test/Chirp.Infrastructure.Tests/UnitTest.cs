@@ -3,6 +3,9 @@ using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Chirp.Core;
 using Chirp.Web;
+
+#nullable disable
+
 namespace Chirp.Infrastructure.Tests;
 
 public class UnitTest
@@ -103,7 +106,7 @@ public class UnitTest
         //Act
         var author = new AuthorDTO("Gaston", "belle@gmail.com");
         var cheep = new CheepDTO("Gaston", "belle@gmail.com", "I <3 Belle", "2023-08-01 13:14:44");
-        repository.CreateCheep(cheep, author);
+        await repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "belle@gmail.com").Count();
 
         //Assert 
@@ -126,8 +129,8 @@ public class UnitTest
 
         //Act
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
-        var cheep = new CheepDTO("Helge","ropf@itu.dk", "Honey cookie", "2023-08-01 13:14:45");
-        repository.CreateCheep(cheep, author);
+        var cheep = new CheepDTO("Helge", "ropf@itu.dk", "Honey cookie", "2023-08-01 13:14:45");
+        await repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "ropf@itu.dk").Count();
 
         //Assert 
@@ -194,7 +197,7 @@ public class UnitTest
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
         var follower = new AuthorDTO("Rasmus", "rnie@itu.dk");
 
-        repository.Follow(author, follower);
+        await repository.Follow(author, follower);
 
         var authorModel = context.Authors.FirstOrDefault(a => a.Email == author.Email);
 
@@ -220,8 +223,8 @@ public class UnitTest
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
         var follower = new AuthorDTO("Rasmus", "rnie@itu.dk");
 
-        repository.Follow(author, follower);
-        repository.UnFollow(author, follower);
+        await repository.Follow(author, follower);
+        await repository.UnFollow(author, follower);
 
         var authorModel = context.Authors.FirstOrDefault(a => a.Email == author.Email);
 
@@ -272,7 +275,7 @@ public class UnitTest
         Assert.Contains(list, j => j.Email == jens.Email);
     }
 
-     [Fact]
+    [Fact]
     public async void TestGetFollowing()
     {
         //Arrange

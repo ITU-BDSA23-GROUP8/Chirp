@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    
+
 }
 
 <div>
@@ -12,14 +12,14 @@
     @if (User.Identity.IsAuthenticated)
     {
 
-    <div class="cheepbox">
-        <h3>What's on your mind @(User.Identity.Name)?</h3>
+        <div class="cheepbox">
+            <h3>What's on your mind @(User.Identity.Name)?</h3>
 
-        <form method="post">
-            <input style="float: left" type="text" name = "message" maxlength = "160" required minlength="2">
-            <input type="submit" value="Share">
-        </form>
-    </div>
+            <form method="post">
+                <input style="float: left" type="text" name="message" maxlength="160" required minlength="2">
+                <input type="submit" value="Share">
+            </form>
+        </div>
     }
 
     @if (Model.Cheeps.Any())
@@ -29,23 +29,27 @@
             {
                 <li>
                     <p>
-                        
+
                         <strong>
                             <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
-                        @if(User.Identity.IsAuthenticated && cheep.AuthorName != User.Identity.Name){
-                            @if(Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.AuthorName, cheep.AuthorEmail))){
-                                <form method="post" asp-page-handler="UnFollow" style="display: inline;">
-                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName" >
-                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Unfollow </button>
+                        @if (User.Identity.IsAuthenticated && cheep.AuthorName != User.Identity.Name)
+                        {
+                            @if (Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.AuthorName, cheep.AuthorEmail)))
+                            {
+                            <form method="post" asp-page-handler="UnFollow" style="display: inline;">
+                                <input type="hidden" name="AuthorName" value="@cheep.AuthorName">
+                                <button type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Unfollow </button>
 
-                                </form>
-                            }else{
-                                 <form method="post" asp-page-handler="Follow" style="display: inline;">
-                                    <input type="hidden" name="AuthorName" value="@cheep.AuthorName">
-                                    <button  type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Follow </button>
+                            </form>
+                            }
+                            else
+                            {
+                            <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                <input type="hidden" name="AuthorName" value="@cheep.AuthorName">
+                                <button type="submit" name="AuthorEmail" value="@cheep.AuthorEmail"> Follow </button>
 
-                                </form>
+                            </form>
                             }
                         }
                     </p>
@@ -59,15 +63,16 @@
             {
                 <a href="/?page=@(Model.pageRequest - 1)">Previous Page</a> <span>|</span>
             }
-            @if (Model.Cheeps.Any()) {
+            @if (Model.Cheeps.Any())
+            {
                 <a href="/?page=@(Model.pageRequest + 1)">Next Page</a>
             }
             else
             {
                 <em>There are no more cheeps.</em>
             }
-            
-            
+
+
         </td>
 
     }
