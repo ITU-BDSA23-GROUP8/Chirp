@@ -52,7 +52,7 @@ public class CheepRepository : ICheepRepository
         var finalList = ownCheeps.ToList();
 
         var followingList = await _context.Authors
-        .Where(x => x.Followers.Any(y => y.Email == user))
+        .Where(x => x.Followers.Any(y => y.UserName == user))
         .ToListAsync();
 
         foreach (var author in followingList)
@@ -72,7 +72,7 @@ public class CheepRepository : ICheepRepository
     public async Task CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
         Author AuthorModel;
-        if (!_context.Authors.Any(e => e.Email == author.Email))
+        if (!_context.Authors.Any(e => e.UserName == author.Name))
         {
             AuthorModel = new Author
             {
@@ -89,7 +89,7 @@ public class CheepRepository : ICheepRepository
 
         var CheepModel = new Cheep
         {
-            Author = await _context.Authors.FirstAsync(c => c.Email == author.Email),
+            Author = await _context.Authors.FirstAsync(c => c.UserName == author.Name),
             Text = cheep.Message,
             TimeStamp = DateTime.Parse(cheep.Timestamp)
         };

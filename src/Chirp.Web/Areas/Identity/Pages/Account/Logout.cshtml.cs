@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace Chirp.Web.Areas.Identity.Pages.Account

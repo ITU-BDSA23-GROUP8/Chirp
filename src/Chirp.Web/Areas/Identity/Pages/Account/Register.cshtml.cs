@@ -111,18 +111,21 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            
+
             returnUrl ??= Url.Content("~/");
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 MailAddress address = new MailAddress(Input.Email);
-                string userName = address.User; 
-                
-                var user = new Author{
+                string userName = address.User;
+
+                var user = new Author
+                {
                     UserName = userName,
-                    Email =Input.Email,
-                    Cheeps = new List<Cheep>() };
+                    Email = Input.Email,
+                    Cheeps = new List<Cheep>()
+                };
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
