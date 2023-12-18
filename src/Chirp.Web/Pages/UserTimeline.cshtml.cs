@@ -12,15 +12,17 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorrepository;
+    private readonly ILikeRepository _likerepository;
     public required List<CheepDTO> Cheeps { get; set; } 
-
+    public List<CheepDTO> Likes { get; set; }
 
     public List<AuthorDTO> Following { get; set; } = new List<AuthorDTO>();
 
-    public UserTimelineModel(ICheepRepository repo, IAuthorRepository authorrepo)
+    public UserTimelineModel(ICheepRepository repo, IAuthorRepository authorrepo, ILikeRepository likerepo)
     {
         _repository = repo;
         _authorrepository = authorrepo;
+        _likerepository = likerepo;
     }
 
     public int pageRequest { get; set; }
@@ -60,6 +62,9 @@ public class UserTimelineModel : PageModel
                 var cheeps = await _repository.GetCheepsFromAuthor(author, pageRequest, (pageRequest - 1) * 32);
                 Cheeps = cheeps.ToList();
             }
+
+            var likes = await _likerepository.GetLikedCheeps(new AuthorDTO(userName, userEmail));
+            Likes = likes.ToList();
         }
         else
         {
@@ -92,5 +97,24 @@ public class UserTimelineModel : PageModel
 
         return RedirectToPage();
     }
+
+    public async Task<IActionResult> OnPostLike(int cheepID){
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+        await _likerepository.Like(new AuthorDTO(userName, userEmail), cheepID);
+
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostUnlike(int cheepID){
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+        await _likerepository.UnLike(new AuthorDTO(userName, userEmail), cheepID);
+
+        return RedirectToPage();
+    }
+
 
 }
