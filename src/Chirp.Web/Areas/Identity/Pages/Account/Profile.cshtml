@@ -10,6 +10,10 @@
         <li>Name: @Model.Name</li>
         <li>Email: @Model.Email</li>
     </ul>
+    <form method="post" asp-page-handler="ForgetMe"> 
+        <button type="submit" >Forget Me!</button>
+    </form>
+    
 
     <h2>Following</h2>
     @if (Model.Following.Any())

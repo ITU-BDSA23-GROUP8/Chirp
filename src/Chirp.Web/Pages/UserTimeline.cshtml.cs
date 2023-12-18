@@ -4,6 +4,7 @@ using Chirp.Infrastructure;
 using Chirp.Core;
 using Chirp.Infrastructure.Migrations;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Razor.Pages;
 
@@ -12,6 +13,7 @@ public class UserTimelineModel : PageModel
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorrepository;
     public required List<CheepDTO> Cheeps { get; set; } 
+
 
     public List<AuthorDTO> Following { get; set; } = new List<AuthorDTO>();
 
@@ -90,4 +92,5 @@ public class UserTimelineModel : PageModel
 
         return RedirectToPage();
     }
+
 }
