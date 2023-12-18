@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Chirp.Infrastructure.Migrations;
 
 namespace Chirp.Razor.Pages;
 
@@ -14,14 +15,21 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _cheeprepository;
     private readonly IAuthorRepository _authorrepository;
+
+    private readonly ILikeRepository _likerepository;
+
+
     public required List<CheepDTO> Cheeps { get; set; }
 
     public List<AuthorDTO> Following { get; set; }
 
-    public PublicModel(ICheepRepository repo, IAuthorRepository authorrepo)
+    public List<CheepDTO> Likes { get; set; }
+
+    public PublicModel(ICheepRepository repo, IAuthorRepository authorrepo, ILikeRepository likerepo)
     {
         _cheeprepository = repo;
         _authorrepository = authorrepo;
+        _likerepository = likerepo;
 
     }
 
@@ -34,7 +42,7 @@ public class PublicModel : PageModel
             var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
             var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             var author = new AuthorDTO(userName, userEmail);
-            var cheep = new CheepDTO(userName, userEmail, message!, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            var cheep = new CheepDTO(userName, userEmail, message!, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), -1, 0);
             await _cheeprepository.CreateCheep(cheep, author);
         }
 
@@ -63,6 +71,9 @@ public class PublicModel : PageModel
 
             var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
             Following = following.ToList();
+
+            var likes = await _likerepository.GetLikedCheeps(new AuthorDTO(userName, userEmail));
+            Likes = likes.ToList();
         }
 
 
@@ -73,10 +84,12 @@ public class PublicModel : PageModel
     {
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
         var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-        Console.WriteLine("follow called: author is " + userName + " " + userEmail);
+        
         var current = new AuthorDTO(userName, userEmail);
         var author = new AuthorDTO(AuthorName, AuthorEmail);
+        
         await _authorrepository.Follow(author, current);
+        
         return RedirectToPage();
     }
     public async Task<IActionResult> OnPostUnFollow(string AuthorName, string AuthorEmail)
@@ -89,4 +102,19 @@ public class PublicModel : PageModel
 
         return RedirectToPage();
     }
+
+    public async Task<IActionResult> OnPostLike(int cheepID){
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+        await _likerepository.ToggleLike(new AuthorDTO(userName, userEmail), cheepID);
+
+        return RedirectToPage();
+    }
+
+    public async Task<int> GetLikes(int cheepID){
+        return await _likerepository.likeCount(cheepID);
+    }
+
+    
 }

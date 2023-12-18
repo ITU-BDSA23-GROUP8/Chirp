@@ -12,6 +12,8 @@ public class Cheep{
     public required Author Author { get; set; }
     public int AuthorId {get; set;}
 
+    public List<Like> Likes {get; set;} = new List<Like>();
+
 }
 
 

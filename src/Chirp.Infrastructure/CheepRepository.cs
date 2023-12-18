@@ -19,7 +19,7 @@ public class CheepRepository : ICheepRepository
         .OrderByDescending(c => c.TimeStamp)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), c.Id, c.Likes.Count()))
         .ToListAsync();
 
     }
@@ -31,7 +31,7 @@ public class CheepRepository : ICheepRepository
         .Where(u => u.Author.UserName == user)
         .Skip(offset)
         .Take(32)
-        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), c.Id, c.Likes.Count()))
         .ToListAsync();
     }
 
@@ -40,7 +40,7 @@ public class CheepRepository : ICheepRepository
         return await _context.Cheeps
         .OrderByDescending(c => c.TimeStamp)
         .Where(u => u.Author.UserName == user)
-        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")))
+        .Select(c => new CheepDTO(c.Author.UserName, c.Author.Email, c.Text, c.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), c.Id, c.Likes.Count()))
         .ToListAsync();
     }
 
@@ -98,5 +98,8 @@ public class CheepRepository : ICheepRepository
         .Add(CheepModel);
         await _context.SaveChangesAsync();
     }
+    
+
+
 
 }

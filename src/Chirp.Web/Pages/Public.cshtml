@@ -47,10 +47,18 @@
 
                                 </form>
                             }
+                            <p>@cheep.Message</p>
+                            <small>&mdash; @cheep.Timestamp</small>
+                            <p>likes: @cheep.likes</p>
+                            <form method="post" asp-page-handler="Like" >
+                                <button type="submit" name="cheepID" value="@cheep.id"> @(Model.Likes.Contains(cheep) ? "💔" : "❤️")</button>
+                            </form>
+                            
+                        } else {
+                        <p>@cheep.Message</p>
+                        <small>&mdash; @cheep.Timestamp</small>
+                        <p>likes: @cheep.likes</p>
                         }
-                    </p>
-                    <p>@cheep.Message</p>
-                    <small>&mdash; @cheep.Timestamp</small>
                 </li>
             }
         </ul>
