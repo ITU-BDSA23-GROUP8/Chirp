@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 using Chirp.Core;
+using Microsoft.VisualBasic;
+
+#nullable disable
 
 public class CheepRepository : ICheepRepository
 {
@@ -26,6 +29,8 @@ public class CheepRepository : ICheepRepository
 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string user, int page, int offset)
     {
+
+
         return await _context.Cheeps
         .OrderByDescending(c => c.TimeStamp)
         .Where(u => u.Author.UserName == user)

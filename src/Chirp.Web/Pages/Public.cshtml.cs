@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-
+#nullable disable
 namespace Chirp.Razor.Pages;
+
+
 
 public class PublicModel : PageModel
 {
@@ -30,7 +32,8 @@ public class PublicModel : PageModel
         returnUrl ??= Url.Content("~/");
         var message = Request.Form["message"];
 
-        if (!message.IsNullOrEmpty()){
+        if (!message.IsNullOrEmpty())
+        {
             var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
             var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
             var author = new AuthorDTO(userName, userEmail);
@@ -57,7 +60,8 @@ public class PublicModel : PageModel
 
         var cheeps = await _cheeprepository.GetCheeps(pageRequest, (pageRequest - 1) * 32);
         Cheeps = cheeps.ToList();
-        if (User.Identity.IsAuthenticated){
+        if (User.Identity.IsAuthenticated)
+        {
             var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
             var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
