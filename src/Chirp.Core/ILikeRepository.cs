@@ -8,6 +8,8 @@ public interface ILikeRepository
 
     public Task<int> likeCount(int cheepID);
 
-    public Task<bool> AuthorHasLiked(AuthorDTO author, int cheepID);
+    //public Task<bool> AuthorHasLiked(AuthorDTO author, int cheepID);
+    public Task Like(AuthorDTO author, int cheepID);
+    public Task UnLike(AuthorDTO author, int cheepID);
 
 }

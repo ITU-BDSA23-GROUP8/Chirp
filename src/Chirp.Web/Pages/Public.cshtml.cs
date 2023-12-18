@@ -107,14 +107,21 @@ public class PublicModel : PageModel
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
         var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
-        await _likerepository.ToggleLike(new AuthorDTO(userName, userEmail), cheepID);
+        await _likerepository.Like(new AuthorDTO(userName, userEmail), cheepID);
 
         return RedirectToPage();
     }
 
-    public async Task<int> GetLikes(int cheepID){
-        return await _likerepository.likeCount(cheepID);
+    public async Task<IActionResult> OnPostUnlike(int cheepID){
+        var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+        await _likerepository.UnLike(new AuthorDTO(userName, userEmail), cheepID);
+
+        return RedirectToPage();
     }
+
+    
 
     
 }

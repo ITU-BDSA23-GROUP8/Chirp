@@ -50,9 +50,15 @@
                             <p>@cheep.Message</p>
                             <small>&mdash; @cheep.Timestamp</small>
                             <p>likes: @cheep.likes</p>
-                            <form method="post" asp-page-handler="Like" >
-                                <button type="submit" name="cheepID" value="@cheep.id"> @(Model.Likes.Contains(cheep) ? "💔" : "❤️")</button>
-                            </form>
+                            @if(Model.Likes.Contains(cheep)){
+                                <form method="post" asp-page-handler="Unlike">
+                                    <button type="submit" name="cheepID" value="@cheep.id"> 💔 </button>
+                                </form>
+                            } else {
+                                <form method="post" asp-page-handler="Like">
+                                    <button type="submit" name="cheepID" value="@cheep.id"> ❤️ </button>
+                                </form>
+                            }
                             
                         } else {
                         <p>@cheep.Message</p>
