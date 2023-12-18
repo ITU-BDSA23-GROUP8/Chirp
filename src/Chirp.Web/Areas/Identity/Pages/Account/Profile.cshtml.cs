@@ -32,7 +32,10 @@ namespace MyApp.Namespace
         {
             if (User.Identity!.IsAuthenticated)
             {
-                var following = await _authorrepository.GetFollowing(new AuthorDTO(User.Identity.Name, User.Identity.Name));
+                var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+                var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+                var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
                 Following = following.ToList();
                 
                 var claimsIdentity = User.Identity as ClaimsIdentity;

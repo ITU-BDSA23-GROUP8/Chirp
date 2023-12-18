@@ -11,7 +11,7 @@
         <li>Email: @Model.Email</li>
     </ul>
     <form method="post" asp-page-handler="ForgetMe"> 
-        <button type="submit" >Forget Me!</button>
+        <button type="submit" style="background-color: rgb(227,11,92); color: white; width: 140px; margin-bottom: 70px" >Forget Me!</button>
     </form>
     
 
@@ -30,6 +30,8 @@
     } else {
         <p>You do not follow anyone.</p>
     }
+
+    
 
     <h2>Your cheeps</h2>
     <ul id="messagelist" class="cheeps">
