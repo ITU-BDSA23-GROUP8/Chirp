@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -12,22 +13,29 @@ namespace MyApp.Namespace
         public required List<CheepDTO> Cheeps { get; set; }
         private readonly ICheepRepository _repository;
         private readonly IAuthorRepository _authorrepository;
+        private readonly UserManager<Author> _userManager; 
+        private readonly SignInManager<Author> _signInManager; 
 
         public string Name;
 
         public string Email;
 
-        public ProfileModel(ICheepRepository repo, IAuthorRepository authorrepo)
+        public ProfileModel(ICheepRepository repo, IAuthorRepository authorrepo, UserManager<Author> userManager, SignInManager<Author> signInManager)
         {
             _repository = repo;
             _authorrepository = authorrepo;
+            _userManager = userManager;
+            _signInManager = signInManager; 
         }
 
         public async Task OnGetAsync()
         {
             if (User.Identity!.IsAuthenticated)
             {
-                var following = await _authorrepository.GetFollowing(new AuthorDTO(User.Identity.Name, User.Identity.Name));
+                var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+                var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+                var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
                 Following = following.ToList();
                 
                 var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -42,6 +50,16 @@ namespace MyApp.Namespace
 
             }
 
+        }
+
+        public async Task<IActionResult> OnPostForgetMe(){
+            var user = await _userManager.GetUserAsync(User); 
+            if (user != null){
+                await _userManager.DeleteAsync(user);
+                await _signInManager.SignOutAsync(); 
+            }
+            //return LocalRedirect(Url.Content("~/")); 
+            return Redirect("/"); 
         }
     }
 }
