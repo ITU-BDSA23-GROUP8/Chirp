@@ -28,7 +28,7 @@ public class LikeRepository : ILikeRepository
 
         var authorModel = await _context.Authors.Include(a => a.Likes).FirstOrDefaultAsync(a => a.UserName == author.Name);
 
-        var list = await _context.Cheeps.Include(x => x.Author).Where(x => x.Likes.Any(y => y.AuthorId == authorModel.Id)).ToListAsync();
+        var list = await _context.Cheeps.Include(x => x.Author).Include(y => y.Likes).Where(x => x.Likes.Any(y => y.AuthorId == authorModel.Id)).ToListAsync();
 
         var cheeps = new List<CheepDTO>();
 
@@ -69,7 +69,7 @@ public class LikeRepository : ILikeRepository
         if (!_context.Likes.Contains(likeModel))
         {
             _context.Likes.Add(likeModel);
-            authorModel.Likes.Add(likeModel);
+            //authorModel.Likes.Add(likeModel);
             
         }
 
