@@ -13,7 +13,7 @@ namespace Chirp.Razor.Pages;
 
 /// <summary>
 /// Razor PageModel for Public page with endpoint "/". Fetches all cheeps from newest to oldest. 
-/// Handles user input like paging, posting a cheep, following and liking. 
+/// Handles user input such as paging, posting a cheep, following and liking. 
 /// </summary>
 
 public class PublicModel : PageModel
@@ -21,7 +21,6 @@ public class PublicModel : PageModel
     private readonly ICheepRepository _cheeprepository;
     private readonly IAuthorRepository _authorrepository;
     private readonly ILikeRepository _likerepository;
-
 
     // Cheeps is the list of cheeps currently being showed. Is assigned in OnGet() handler.
     public required List<CheepDTO> Cheeps { get; set; }
@@ -38,9 +37,6 @@ public class PublicModel : PageModel
     /// <summary>
     /// Constructor uses dependency injection to access services, used to access data and logic.
     /// </summary>
-    /// <param name="repo"></param>
-    /// <param name="authorrepo"></param>
-    /// <param name="likerepo"></param>
     public PublicModel(ICheepRepository repo, IAuthorRepository authorrepo, ILikeRepository likerepo)
     {
         _cheeprepository = repo;
@@ -52,9 +48,6 @@ public class PublicModel : PageModel
     /// <summary>
     /// Razor page handler for posting a cheep as a user. 
     /// </summary>
-    /// <param name="returnUrl"></param>
-    /// <returns></returns>
-
     public async Task<IActionResult> OnPostAsync(string returnUrl = null)
     {
         returnUrl ??= Url.Content("~/");
@@ -64,18 +57,22 @@ public class PublicModel : PageModel
         {
             var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
             var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-            
+
             var author = new AuthorDTO(userName, userEmail);
             var cheep = new CheepDTO(userName, userEmail, message!, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), -1, 0);
-            
+
             await _cheeprepository.CreateCheep(cheep, author);
         }
 
         return LocalRedirect(returnUrl);
     }
 
-
-
+    /// <summary>
+    /// OnGet() is handler method called when PublicTimeline page is first navigated to.
+    /// Fetches what cheeps should be shown according to whether the user is authenticated and other conditions.
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
     public async Task<ActionResult> OnGet()
     {
         // https://learn.microsoft.com/en-us/dotnet/api/system.web.httprequest.querystring?view=netframework-4.8.1
@@ -106,6 +103,14 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    /// <summary>
+    /// OnPostFollow() is a named page handler, that is called as a post method in Public.cshtml
+    /// Handles a user following another author. 
+    /// The methods returns RedirectToPage(), which calls a GET request and therefore calls OnGet() again.
+    /// </summary>
+    /// <param name="AuthorName"></param>
+    /// <param name="AuthorEmail"></param>
+    /// <returns></returns>
     public async Task<IActionResult> OnPostFollow(string AuthorName, string AuthorEmail)
     {
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
@@ -118,6 +123,15 @@ public class PublicModel : PageModel
 
         return RedirectToPage();
     }
+
+    /// <summary>
+    /// OnPostUnFollow() is a named page handler, that is called as a post method in Public.cshtml
+    /// Handles a user unfollowing another author. 
+    /// The methods returns RedirectToPage(), which calls a GET request and therefore calls OnGet() again.
+    /// </summary>
+    /// <param name="AuthorName"></param>
+    /// <param name="AuthorEmail"></param>
+    /// <returns></returns>
     public async Task<IActionResult> OnPostUnFollow(string AuthorName, string AuthorEmail)
     {
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
@@ -129,6 +143,14 @@ public class PublicModel : PageModel
         return RedirectToPage();
     }
 
+
+    /// <summary>
+    /// OnPostLike() is a named page handler, that is called as a POST method in Public.cshtml
+    /// Handles a user liking a cheep. 
+    /// The methods returns RedirectToPage(), which calls a GET request and therefore calls OnGet() again.
+    /// </summary>
+    /// <param name="cheepID"></param>
+    /// <returns></returns>
     public async Task<IActionResult> OnPostLike(int cheepID)
     {
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
@@ -139,6 +161,13 @@ public class PublicModel : PageModel
         return RedirectToPage();
     }
 
+    /// <summary>
+    /// OnPostUnlike() is a named page handler, that is called as a POST method in Public.cshtml
+    /// Handles a user removing a like on a cheep. 
+    /// The methods returns RedirectToPage(), which calls a GET request and therefore calls OnGet() again.
+    /// </summary>
+    /// <param name="cheepID"></param>
+    /// <returns></returns>
     public async Task<IActionResult> OnPostUnlike(int cheepID)
     {
         var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;

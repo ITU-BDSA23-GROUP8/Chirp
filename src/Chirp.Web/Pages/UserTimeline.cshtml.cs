@@ -164,7 +164,7 @@ public class UserTimelineModel : PageModel
         return RedirectToPage();
     }
 
-     /// <summary>
+    /// <summary>
     /// OnPostUnlike() is a named page handler, that is called as a POST method in UserTimeline.cshtml
     /// Handles a user removing a like on a cheep. 
     /// The methods returns RedirectToPage(), which calls a GET request and therefore calls OnGet() again.

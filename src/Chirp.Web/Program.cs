@@ -10,7 +10,7 @@ using System.Security.Claims;
 /// <summary>
 /// Startup code for Chirp application. 
 /// This is written in top-level statements.
-/// First the WebApplication is configured, and then it is built. Lastly it is ran. 
+/// First the WebApplication is configured, and then it is built. Lastly it is run. 
 /// </summary>
 
 var builder = WebApplication.CreateBuilder(args);
