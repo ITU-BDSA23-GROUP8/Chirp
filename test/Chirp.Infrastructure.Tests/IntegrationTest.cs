@@ -21,6 +21,7 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
         // Arrange
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
+        
 
         // Act
         var content = await response.Content.ReadAsStringAsync();
