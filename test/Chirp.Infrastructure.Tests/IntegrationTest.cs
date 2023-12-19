@@ -4,15 +4,17 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 // Taken from lecture 5
-public class IntegrationTest : IClassFixture<OwnWebApplicationFactory<Program>>
+public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly OwnWebApplicationFactory<Program> _fixture;
+    private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public IntegrationTest(OwnWebApplicationFactory<Program> fixture)
+    public IntegrationTest(WebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        Environment.SetEnvironmentVariable("GITHUB_CLIENT_ID", "ID");
+        Environment.SetEnvironmentVariable("GITHUB_CLIENT_SECRET", "SECRET");
     }
 
     [Fact]
@@ -21,6 +23,7 @@ public class IntegrationTest : IClassFixture<OwnWebApplicationFactory<Program>>
         // Arrange
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
+        
 
         // Act
         var content = await response.Content.ReadAsStringAsync();

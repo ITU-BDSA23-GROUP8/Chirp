@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 // https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0#customize-webapplicationfactory
-public class OwnWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
+/*public class OwnWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
         where TProgram : class
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -50,3 +50,4 @@ public class OwnWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram
         builder.UseEnvironment("Development");
     }
 }
+*/
