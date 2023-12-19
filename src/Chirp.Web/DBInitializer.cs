@@ -2,7 +2,11 @@ using System;
 using Chirp.Infrastructure;
 namespace Chirp.Web;
 
-
+/// <summary>
+/// Seeds the database with sample data with Authors and Cheeps. 
+/// This was made available to us through the BDSA course. 
+/// The SeedDatabase() method has been adapted to fit our data models. 
+/// </summary>
 public static class DBInitializer
 {
     public static void SeedDatabase(ChirpContext chirpContext)
