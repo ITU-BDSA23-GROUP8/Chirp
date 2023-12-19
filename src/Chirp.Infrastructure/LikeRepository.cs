@@ -69,6 +69,8 @@ public class LikeRepository : ILikeRepository
         if (!_context.Likes.Contains(likeModel))
         {
             _context.Likes.Add(likeModel);
+            authorModel.Likes.Add(likeModel);
+            
         }
 
 
