@@ -23,5 +23,5 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter FullyQualifiedName!=IntegrationTest
+      run: dotnet test --filter "TestCategory!=IntegrationTest" --no-build --verbosity normal 
       
