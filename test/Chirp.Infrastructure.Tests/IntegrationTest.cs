@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 // Taken from lecture 5
-public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
+public class IntegrationTest : IClassFixture<OwnWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
+    private readonly OwnWebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public IntegrationTest(WebApplicationFactory<Program> fixture)
+    public IntegrationTest(OwnWebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
