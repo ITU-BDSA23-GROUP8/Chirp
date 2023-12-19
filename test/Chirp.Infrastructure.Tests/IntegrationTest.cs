@@ -13,8 +13,6 @@ public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
-        Environment.SetEnvironmentVariable("GITHUB_CLIENT_ID", "ID");
-        Environment.SetEnvironmentVariable("GITHUB_CLIENT_SECRET", "SECRET");
     }
 
     [Fact]
