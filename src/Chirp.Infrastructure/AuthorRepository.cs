@@ -96,7 +96,7 @@ public class AuthorRepository : IAuthorRepository
 
         foreach (var Follower in list)
         {
-            Following.Add(new AuthorDTO(Follower.UserName, Follower.Email));
+            Following.Add(new AuthorDTO(Follower.UserName!, Follower.Email!));
         }
 
         return Following;

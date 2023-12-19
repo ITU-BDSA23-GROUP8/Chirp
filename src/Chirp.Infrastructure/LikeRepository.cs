@@ -28,13 +28,13 @@ public class LikeRepository : ILikeRepository
 
         var authorModel = await _context.Authors.Include(a => a.Likes).FirstOrDefaultAsync(a => a.UserName == author.Name);
 
-        var list = await _context.Cheeps.Include(x => x.Author).Where(x => x.Likes.Any(y => y.AuthorId == authorModel.Id)).ToListAsync();
+        var list = await _context.Cheeps.Include(x => x.Author).Where(x => x.Likes.Any(y => y.AuthorId == authorModel!.Id)).ToListAsync();
 
         var cheeps = new List<CheepDTO>();
 
         foreach (var cheep in list)
         {
-            cheeps.Add(new CheepDTO(cheep.Author.UserName, cheep.Author.Email, cheep.Text, cheep.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), cheep.Id, cheep.Likes.Count()));
+            cheeps.Add(new CheepDTO(cheep.Author.UserName!, cheep.Author.Email!, cheep.Text, cheep.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss"), cheep.Id, cheep.Likes.Count()));
         }
 
         return cheeps;
@@ -46,7 +46,7 @@ public class LikeRepository : ILikeRepository
     {
         var cheepModel = await _context.Cheeps.FirstOrDefaultAsync(c => c.Id == cheepID);
 
-        return cheepModel.Likes.Count();
+        return cheepModel!.Likes.Count();
     }
 
 
@@ -82,13 +82,13 @@ public class LikeRepository : ILikeRepository
         var authorModel = await _context.Authors.FirstOrDefaultAsync(a => a.UserName == author.Name);
         var cheepModel = await _context.Cheeps.FirstOrDefaultAsync(c => c.Id == cheepID);
 
-        var likeModel = await _context.Likes.FirstOrDefaultAsync(a => a.CheepId == cheepModel.Id && a.AuthorId == authorModel.Id);
+        var likeModel = await _context.Likes.FirstOrDefaultAsync(a => a.CheepId == cheepModel!.Id && a.AuthorId == authorModel!.Id);
 
         if (_context.Likes.Contains(likeModel))
         {
-            authorModel.Likes.Remove(likeModel);
-            cheepModel.Likes.Remove(likeModel);
-            _context.Likes.Remove(likeModel);
+            authorModel!.Likes.Remove(likeModel!);
+            cheepModel!.Likes.Remove(likeModel!);
+            _context.Likes.Remove(likeModel!);
 
 
         }
