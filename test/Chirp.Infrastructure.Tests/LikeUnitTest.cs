@@ -24,7 +24,7 @@ public class LikeUnitTest
         await repository.Like(new AuthorDTO("Helge", "ropf@itu.dk"), 1);
         await repository.Like(new AuthorDTO("Rasmus", "rnie@itu.dk"), 1);
 
-        var count = await repository.likeCount(1);
+        var count = await repository.LikeCount(1);
 
         //Assert 
         Assert.Equal(2, count);
@@ -47,7 +47,7 @@ public class LikeUnitTest
         await repository.Like(new AuthorDTO("Helge", "ropf@itu.dk"), 1);
         await repository.UnLike(new AuthorDTO("Helge", "ropf@itu.dk"), 1);
 
-        var count = await repository.likeCount(1);
+        var count = await repository.LikeCount(1);
 
         //Assert 
         Assert.Equal(0, count);
