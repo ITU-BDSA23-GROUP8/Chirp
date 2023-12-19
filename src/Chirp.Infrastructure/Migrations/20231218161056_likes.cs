@@ -5,7 +5,7 @@
 namespace Chirp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class likes : Migration
+    public partial class Likes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
