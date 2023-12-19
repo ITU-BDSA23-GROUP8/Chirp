@@ -1,8 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
-
 using System.Security.Permissions;
 using Chirp.Core;
+
+/// <summary>
+/// The class 'AuthorRepository' inherits from the interface 'IAuthorRepository'. 
+/// This repository is responsible for interacting 
+/// with the databse and retrieves data about the Authors. 
+/// 
+/// This class has methods such as 'CreateAuthor', 'Follow', 'Unfollow', 
+/// which provides functionality for an Author. 
+/// </summary>
 
 public class AuthorRepository : IAuthorRepository
 {
@@ -13,23 +21,8 @@ public class AuthorRepository : IAuthorRepository
         _context = context;
     }
 
-    public async Task<AuthorDTO?> GetAuthorFromName(string user)
-    {
-        return await _context.Authors
-        .Where(x => x.UserName == user)
-        .Select(y => new AuthorDTO(y.UserName, y.Email))
-        .FirstOrDefaultAsync();
-    }
 
-
-    public async Task<AuthorDTO?> GetAuthorFromEmail(string email)
-    {
-        return await _context.Authors
-        .Where(x => x.Email == email)
-        .Select(y => new AuthorDTO(y.UserName, y.Email))
-        .FirstOrDefaultAsync();
-    }
-
+    // The method 'CreateAuthor' creates an Author, unless this Author already exists, by checking the Email address. 
     public void CreateAuthor(AuthorDTO author)
     {
         if (!_context.Authors.Any(e => e.Email == author.Email))
@@ -51,6 +44,7 @@ public class AuthorRepository : IAuthorRepository
         }
     }
 
+
     public async Task Follow(AuthorDTO author, AuthorDTO follower)
     {
 
@@ -63,7 +57,7 @@ public class AuthorRepository : IAuthorRepository
             {
                 authorModel.Followers.Add(followerModel);
                 followerModel.Following.Add(authorModel);
-                
+
             }
 
         }
@@ -72,6 +66,7 @@ public class AuthorRepository : IAuthorRepository
 
     }
 
+    // The method 'Unfollow' unfollows an Author, but only if the user is already following them.
     public async Task UnFollow(AuthorDTO author, AuthorDTO follower)
     {
         var authorModel = await _context.Authors.Include(a => a.Followers).FirstOrDefaultAsync(a => a.UserName == author.Name);
@@ -79,35 +74,20 @@ public class AuthorRepository : IAuthorRepository
 
         if (authorModel != null && followerModel != null)
         {
-            
+
             var isFollow = await IsFollowing(author, follower);
             if (isFollow)
             {
-               
+
                 authorModel.Followers.Remove(followerModel);
                 followerModel.Following.Remove(authorModel);
             }
         }
         await _context.SaveChangesAsync();
-        
+
     }
 
-    public async Task<List<AuthorDTO>> GetFollowers(AuthorDTO author)
-    {
-        var list = await _context.Authors
-        .Where(x => x.Following.Any(y => y.Email == author.Email))
-        .ToListAsync();
 
-        
-        
-        var followers = new List<AuthorDTO>();
-        foreach (var follower in list)
-        {
-            followers.Add(new AuthorDTO(follower.UserName, follower.Email));
-        }
-
-        return followers;
-    }
     public async Task<List<AuthorDTO>> GetFollowing(AuthorDTO author)
     {
         var list = await _context.Authors.Where(x => x.Followers.Any(y => y.Email == author.Email)).ToListAsync();
@@ -129,5 +109,8 @@ public class AuthorRepository : IAuthorRepository
         return list.Contains(author);
     }
 
-
+    public Task GetAuthorFromName(string v)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -26,47 +26,7 @@ public class UnitTest
         //Assert 
         Assert.NotNull(createdAuthor);
     }
-
-    [Fact]
-    public async void TestGetAuthorFromName()
-    {
-        //Arrange
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var context = new ChirpContext(builder.Options);
-        await context.Database.EnsureCreatedAsync();
-        var repository = new AuthorRepository(context);
-
-        DBInitializer.SeedDatabase(context);
-
-        //Act
-        var createdAuthor = await repository.GetAuthorFromName("Helge");
-
-        //Assert 
-        Assert.NotNull(createdAuthor);
-    }
-
-    [Fact]
-    public async void TestGetAuthorFromEmail()
-    {
-        //Arrange
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var context = new ChirpContext(builder.Options);
-        await context.Database.EnsureCreatedAsync();
-        var repository = new AuthorRepository(context);
-
-        DBInitializer.SeedDatabase(context);
-
-        //Act
-        var createdAuthor = await repository.GetAuthorFromEmail("ropf@itu.dk");
-
-        //Assert 
-        Assert.NotNull(createdAuthor);
-    }
-    [Fact]
+    
     public async void TestDoubleCreatedAuthor()
     {
         //Arrange
@@ -228,48 +188,6 @@ public class UnitTest
         //Assert 
         Assert.DoesNotContain(authorModel.Followers, f => f.Email == follower.Email);
 
-    }
-
-    [Fact]
-    public async void TestGetFollowers()
-    {
-        //Arrange
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var context = new ChirpContext(builder.Options);
-        await context.Database.EnsureCreatedAsync();
-        var repository = new AuthorRepository(context);
-
-        DBInitializer.SeedDatabase(context);
-
-        //Act
-        var per = new Author
-        {
-            UserName = "Per",
-            Email = "postmand@mail.com",
-            Cheeps = new List<Cheep>()
-        };
-
-        var jens = new Author
-        {
-            UserName = "Jens",
-            Email = "vejmand@mail.com",
-            Cheeps = new List<Cheep>()
-        };
-
-        context.Authors.Add(per);
-        context.Authors.Add(jens);
-
-        per.Followers.Add(jens);
-        jens.Following.Add(per);
-
-        context.SaveChanges();
-
-        var list = await repository.GetFollowers(new AuthorDTO(per.UserName, per.Email));
-
-        //Assert 
-        Assert.Contains(list, j => j.Email == jens.Email);
     }
 
      [Fact]

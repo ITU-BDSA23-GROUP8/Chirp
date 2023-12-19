@@ -2,6 +2,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 using Chirp.Core;
 
+/// <summary>
+/// The class 'CheepRepository' inherits from the interface 'ICheepRepository'. 
+/// This repository is responsible for interacting with the database, to retrieve data about the Cheeps. 
+/// 
+/// This class has methods such as 'GetCheeps', 'GetCheepsFromAuthor', 'CreateCheep' and other methods,
+/// which provides functionality for a Cheep. 
+/// </summary>
+
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpContext _context;
@@ -11,8 +19,7 @@ public class CheepRepository : ICheepRepository
         _context = context;
     }
 
-
-
+    // The method 'GetCheeps' loads the cheeps from a specific page.  
     public async Task<IEnumerable<CheepDTO>> GetCheeps(int page, int offset)
     {
         return await _context.Cheeps
@@ -24,6 +31,7 @@ public class CheepRepository : ICheepRepository
 
     }
 
+    // The method 'GetCheepsFromAuthor' loads all cheeps from a certain Author, from a certain page.  
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string user, int page, int offset)
     {
         return await _context.Cheeps
@@ -35,6 +43,7 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
+    // The method 'GetAllCheepsFromAuthor' loads all cheeps from a certain Author.
     public async Task<IEnumerable<CheepDTO>> GetAllCheepsFromAuthor(string user)
     {
         return await _context.Cheeps
@@ -44,7 +53,8 @@ public class CheepRepository : ICheepRepository
         .ToListAsync();
     }
 
-
+    // The method 'GetCheepsFromFollowing' loads all cheeps from from oneself, and all the Authors that you follow. 
+    // These cheeps is then ordered by descending on 'Timestamp', so the user sees the newest cheeps. 
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromFollowing(string user, int page, int offset)
     {
 
@@ -57,7 +67,6 @@ public class CheepRepository : ICheepRepository
 
         foreach (var author in followingList)
         {
-            //var cheeplist = await GetCheepsFromAuthor(user, page, offset);
             var followingCheeps = await GetAllCheepsFromAuthor(author.UserName!);
             var cheeplist = followingCheeps.ToList();
             finalList.AddRange(cheeplist);
@@ -68,6 +77,7 @@ public class CheepRepository : ICheepRepository
         .Skip(offset)
         .Take(32);
     }
+
 
     public async Task CreateCheep(CheepDTO cheep, AuthorDTO author)
     {
@@ -98,8 +108,5 @@ public class CheepRepository : ICheepRepository
         .Add(CheepModel);
         await _context.SaveChangesAsync();
     }
-    
-
-
 
 }
