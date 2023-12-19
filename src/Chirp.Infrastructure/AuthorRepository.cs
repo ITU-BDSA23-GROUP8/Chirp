@@ -63,7 +63,7 @@ public class AuthorRepository : IAuthorRepository
             {
                 authorModel.Followers.Add(followerModel);
                 followerModel.Following.Add(authorModel);
-                
+
             }
 
         }
@@ -79,17 +79,17 @@ public class AuthorRepository : IAuthorRepository
 
         if (authorModel != null && followerModel != null)
         {
-            
+
             var isFollow = await IsFollowing(author, follower);
             if (isFollow)
             {
-               
+
                 authorModel.Followers.Remove(followerModel);
                 followerModel.Following.Remove(authorModel);
             }
         }
         await _context.SaveChangesAsync();
-        
+
     }
 
     public async Task<List<AuthorDTO>> GetFollowers(AuthorDTO author)
@@ -98,28 +98,28 @@ public class AuthorRepository : IAuthorRepository
         .Where(x => x.Following.Any(y => y.Email == author.Email))
         .ToListAsync();
 
-        
-        
-        var followers = new List<AuthorDTO>();
-        foreach (var follower in list)
+
+
+        var Followers = new List<AuthorDTO>();
+        foreach (var Follower in list)
         {
-            followers.Add(new AuthorDTO(follower.UserName, follower.Email));
+            Followers.Add(new AuthorDTO(Follower.UserName, Follower.Email));
         }
 
-        return followers;
+        return Followers;
     }
     public async Task<List<AuthorDTO>> GetFollowing(AuthorDTO author)
     {
         var list = await _context.Authors.Where(x => x.Followers.Any(y => y.Email == author.Email)).ToListAsync();
 
-        var following = new List<AuthorDTO>();
+        var Following = new List<AuthorDTO>();
 
-        foreach (var follower in list)
+        foreach (var Follower in list)
         {
-            following.Add(new AuthorDTO(follower.UserName, follower.Email));
+            Following.Add(new AuthorDTO(Follower.UserName, Follower.Email));
         }
 
-        return following;
+        return Following;
     }
 
     public async Task<bool> IsFollowing(AuthorDTO author, AuthorDTO follower)

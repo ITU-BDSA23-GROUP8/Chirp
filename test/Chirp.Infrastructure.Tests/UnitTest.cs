@@ -3,6 +3,9 @@ using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Chirp.Core;
 using Chirp.Web;
+
+#nullable disable
+
 namespace Chirp.Infrastructure.Tests;
 
 public class UnitTest
@@ -194,7 +197,7 @@ public class UnitTest
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
         var follower = new AuthorDTO("Rasmus", "rnie@itu.dk");
 
-        repository.Follow(author, follower);
+        await repository.Follow(author, follower);
 
         var authorModel = context.Authors.FirstOrDefault(a => a.Email == author.Email);
 
@@ -220,8 +223,8 @@ public class UnitTest
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
         var follower = new AuthorDTO("Rasmus", "rnie@itu.dk");
 
-        repository.Follow(author, follower);
-        repository.UnFollow(author, follower);
+        await repository.Follow(author, follower);
+        await repository.UnFollow(author, follower);
 
         var authorModel = context.Authors.FirstOrDefault(a => a.Email == author.Email);
 
@@ -272,7 +275,7 @@ public class UnitTest
         Assert.Contains(list, j => j.Email == jens.Email);
     }
 
-     [Fact]
+    [Fact]
     public async void TestGetFollowing()
     {
         //Arrange
