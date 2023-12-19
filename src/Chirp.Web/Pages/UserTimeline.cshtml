@@ -20,7 +20,7 @@
                         <strong>
                             <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
-                        @if (User.Identity.IsAuthenticated && cheep.AuthorName != User.Identity.Name)
+                        @if (User.Identity!.IsAuthenticated && cheep.AuthorName != User.Identity.Name)
                         {
                             @if (Model.Following.Contains(new Chirp.Core.AuthorDTO(cheep.AuthorName, cheep.AuthorEmail)))
                             {
@@ -38,19 +38,22 @@
 
                             </form>
                             }
-                            <p>@cheep.Message</p>
-                            <small>&mdash; @cheep.Timestamp</small>
-                            <p>likes: @cheep.likes</p>
-                            @if(Model.Likes.Contains(cheep)){
-                                <form method="post" asp-page-handler="Unlike">
-                                    <button type="submit" name="cheepID" value="@cheep.id"> 💔 </button>
-                                </form>
-                            } else {
-                                <form method="post" asp-page-handler="Like">
-                                    <button type="submit" name="cheepID" value="@cheep.id"> ❤️ </button>
-                                </form>
+                        <p>@cheep.Message</p>
+                        <small>&mdash; @cheep.Timestamp</small>
+                        <p>likes: @cheep.likes</p>
+                            @if (Model.Likes.Contains(cheep))
+                            {
+                            <form method="post" asp-page-handler="Unlike">
+                                <button type="submit" name="cheepID" value="@cheep.id"> 💔 </button>
+                            </form>
                             }
-                       
+                            else
+                            {
+                            <form method="post" asp-page-handler="Like">
+                                <button type="submit" name="cheepID" value="@cheep.id"> ❤️ </button>
+                            </form>
+                            }
+
                         }
                         else
                         {

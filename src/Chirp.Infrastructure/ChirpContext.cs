@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 namespace Chirp.Infrastructure;
@@ -22,7 +21,7 @@ public class ChirpContext : IdentityDbContext<Author, IdentityRole<int>, int>
     public ChirpContext(DbContextOptions<ChirpContext> options)
         : base(options)
     {
-        
+
     }
 
     //Configures the schema for the Identity Framework with the given types. 
@@ -32,11 +31,11 @@ public class ChirpContext : IdentityDbContext<Author, IdentityRole<int>, int>
         base.OnModelCreating(builder);
 
         builder.Entity<Like>().ToTable("Likes").HasNoKey();
-        builder.Entity<Like>().HasKey(l => new {l.CheepId, l.AuthorId});
+        builder.Entity<Like>().HasKey(l => new { l.CheepId, l.AuthorId });
 
         builder.Entity<Like>().HasOne(l => l.Cheep).WithMany(c => c.Likes).OnDelete(DeleteBehavior.Restrict);
         builder.Entity<Like>().HasOne(l => l.Author).WithMany(c => c.Likes).OnDelete(DeleteBehavior.Restrict);
-        
+
 
     }
 }

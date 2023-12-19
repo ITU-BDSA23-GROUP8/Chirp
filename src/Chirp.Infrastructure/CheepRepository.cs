@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 using Chirp.Core;
-using Microsoft.VisualBasic;
 
 #nullable disable
 

@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
 namespace Chirp.Infrastructure;
 
 /// <summary>

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
-using System.Security.Permissions;
 using Chirp.Core;
 
 /// <summary>

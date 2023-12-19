@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.Infrastructure;
 using Chirp.Core;
-using Chirp.Infrastructure.Migrations;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+#nullable disable
 
 namespace Chirp.Razor.Pages;
 

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 using Chirp.Core;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 /// <summary>
 /// The class 'LikeRepository' inherits from the interface 'ILikeRepository'. 
