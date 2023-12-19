@@ -14,6 +14,7 @@ namespace MyApp.Namespace
         public required List<CheepDTO> Cheeps { get; set; }
         private readonly ICheepRepository _repository;
         private readonly IAuthorRepository _authorrepository;
+        private readonly ILikeRepository _likerepository;
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
 
@@ -21,10 +22,11 @@ namespace MyApp.Namespace
 
         public string Email;
 
-        public ProfileModel(ICheepRepository repo, IAuthorRepository authorrepo, UserManager<Author> userManager, SignInManager<Author> signInManager)
+        public ProfileModel(ICheepRepository repo, IAuthorRepository authorrepo, ILikeRepository likerepo, UserManager<Author> userManager, SignInManager<Author> signInManager)
         {
             _repository = repo;
             _authorrepository = authorrepo;
+            _likerepository = likerepo;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -58,6 +60,7 @@ namespace MyApp.Namespace
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
+                await _likerepository.DeleteLikes(new AuthorDTO(user.UserName, user.Email));
                 await _userManager.DeleteAsync(user);
                 await _signInManager.SignOutAsync();
             }

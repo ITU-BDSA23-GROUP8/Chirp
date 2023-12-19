@@ -13,4 +13,6 @@ public interface ILikeRepository
     public Task Like(AuthorDTO author, int cheepID);
     public Task UnLike(AuthorDTO author, int cheepID);
 
+    public Task DeleteLikes(AuthorDTO author);
+
 }

@@ -96,4 +96,12 @@ public class LikeRepository : ILikeRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteLikes(AuthorDTO author){
+        var authorModel = await _context.Authors.Include(a=> a.Likes).FirstOrDefaultAsync(a => a.UserName == author.Name);
+       _context.Likes.RemoveRange(authorModel.Likes);
+
+        await _context.SaveChangesAsync();
+
+    }
+
 }
