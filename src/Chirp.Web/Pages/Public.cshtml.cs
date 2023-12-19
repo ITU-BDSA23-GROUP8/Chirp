@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Linq;
-using Chirp.Infrastructure;
 using Chirp.Core;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using Chirp.Infrastructure.Migrations;
+#nullable disable
 
 namespace Chirp.Razor.Pages;
 
@@ -26,10 +22,10 @@ public class PublicModel : PageModel
     public required List<CheepDTO> Cheeps { get; set; }
 
     // Likes is a list of cheeps, that the author has liked. 
-    public List<AuthorDTO> Following { get; set; }
+    public List<AuthorDTO> Following { get; set; } = new List<AuthorDTO>();
 
     // Following is a list of authors that the user is following.
-    public List<CheepDTO> Likes { get; set; }
+    public List<CheepDTO> Likes { get; set; } = new List<CheepDTO>();
 
     // pageRequest is used for paging, s.t. only 32 cheeps are shown at a time. 
     public int pageRequest { get; set; }

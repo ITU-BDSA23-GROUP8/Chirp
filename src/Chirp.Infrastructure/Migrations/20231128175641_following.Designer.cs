@@ -13,7 +13,7 @@ namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpContext))]
     [Migration("20231128175641_following")]
-    partial class Following
+    partial class Following       //Spørg Clara om dette - skal jeg køre Migrations/Databasen igen?
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
