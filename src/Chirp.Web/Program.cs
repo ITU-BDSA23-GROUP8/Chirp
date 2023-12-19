@@ -7,21 +7,33 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
-var builder = WebApplication.CreateBuilder(args);
+/// <summary>
+/// Startup code for Chirp application. 
+/// This is written in top-level statements.
+/// First the WebApplication is configured, and then it is built. Lastly it is run. 
+/// </summary>
 
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-//builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddTransient<ICheepRepository, CheepRepository>();
-builder.Services.AddTransient<IAuthorRepository, AuthorRepository>();
-builder.Services.AddTransient<ILikeRepository, LikeRepository>();
+
+// Registering services with DI (Dependency Injection) and their implementations. 
+// Used when routing requests a service.
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 builder.Services.AddDbContext<ChirpContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"))
 );
 
-builder.Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ChirpContext>();
+// Sets the data model Author as the identity for ASP.NET Core Identity
+builder.Services.AddDefaultIdentity<Author>(
+    options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ChirpContext>();
+
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings
@@ -33,6 +45,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+
+// Adds and configures GitHub OAuth to authentication
 builder.Services.AddAuthentication()
     .AddGitHub(o =>
     {
@@ -61,7 +75,7 @@ using (var scope = app.Services.CreateScope())
 
     var context = services.GetRequiredService<ChirpContext>();
     context.Database.EnsureCreated();
-    DBInitializer.SeedDatabase(context);
+    DBInitializer.SeedDatabase(context); // Seed database with sample data
 }
 
 app.UseHttpsRedirection();
