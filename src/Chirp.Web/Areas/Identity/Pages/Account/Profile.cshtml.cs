@@ -4,6 +4,7 @@ using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+#nullable disable
 
 namespace MyApp.Namespace
 {
@@ -13,8 +14,8 @@ namespace MyApp.Namespace
         public required List<CheepDTO> Cheeps { get; set; }
         private readonly ICheepRepository _repository;
         private readonly IAuthorRepository _authorrepository;
-        private readonly UserManager<Author> _userManager; 
-        private readonly SignInManager<Author> _signInManager; 
+        private readonly UserManager<Author> _userManager;
+        private readonly SignInManager<Author> _signInManager;
 
         public string Name;
 
@@ -25,7 +26,7 @@ namespace MyApp.Namespace
             _repository = repo;
             _authorrepository = authorrepo;
             _userManager = userManager;
-            _signInManager = signInManager; 
+            _signInManager = signInManager;
         }
 
         public async Task OnGetAsync()
@@ -37,11 +38,11 @@ namespace MyApp.Namespace
 
                 var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
                 Following = following.ToList();
-                
+
                 var claimsIdentity = User.Identity as ClaimsIdentity;
                 var emailClaim = claimsIdentity!.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
                 Email = emailClaim!.Value;
-                
+
                 var nameClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
                 Name = nameClaim!.Value;
 
@@ -52,14 +53,15 @@ namespace MyApp.Namespace
 
         }
 
-        public async Task<IActionResult> OnPostForgetMe(){
-            var user = await _userManager.GetUserAsync(User); 
-            if (user != null){
+        public async Task<IActionResult> OnPostForgetMe()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
                 await _userManager.DeleteAsync(user);
-                await _signInManager.SignOutAsync(); 
+                await _signInManager.SignOutAsync();
             }
-            //return LocalRedirect(Url.Content("~/")); 
-            return Redirect("/"); 
+            return Redirect("/");
         }
     }
 }

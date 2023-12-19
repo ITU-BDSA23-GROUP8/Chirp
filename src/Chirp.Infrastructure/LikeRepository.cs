@@ -89,12 +89,9 @@ public class LikeRepository : ILikeRepository
             cheepModel!.Likes.Remove(likeModel!);
             _context.Likes.Remove(likeModel!);
 
-
         }
+
         await _context.SaveChangesAsync();
     }
-
-
-
 
 }

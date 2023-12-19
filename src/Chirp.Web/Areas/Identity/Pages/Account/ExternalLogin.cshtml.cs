@@ -1,6 +1,5 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Chirp.Infrastructure;
@@ -8,6 +7,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+
+#nullable disable
 
 namespace Chirp.Web.Areas.Identity.Pages.Account;
 
@@ -50,16 +51,6 @@ public class ExternalLoginModel : PageModel
         var properties = _signInManager.ConfigureExternalAuthenticationProperties("GitHub", redirectUrl);
         return new ChallengeResult("GitHub", properties);
     }
-
-/*
-    public IActionResult OnPost(string provider, string returnUrl = null)
-    {
-        // Request a redirect to the external login provider.
-        var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        return new ChallengeResult(provider, properties);
-    }
-    */
 
     public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
     {
@@ -104,69 +95,70 @@ public class ExternalLoginModel : PageModel
                 };
             }
             if (ModelState.IsValid)
-        {
-            // Get the information about the user from the external login provider
-            //var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
             {
-                throw new ApplicationException("Error loading external login information during confirmation.");
-            }
-
-
-            var user = new Author
-            {
-                UserName = "name",
-                Email = "mail",
-                Cheeps = new List<Cheep>()
-            };
-
-
-
-            var createResult = await _userManager.CreateAsync(user);
-            if (createResult.Succeeded)
-            {
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                // Get the information about the user from the external login provider
+                //var info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
                 {
-                    await _userManager.SetUserNameAsync(user, info.Principal.FindFirstValue(ClaimTypes.Name));
-                    user.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+
+
+                var user = new Author
                 {
-                    await _userManager.SetEmailAsync(user, info.Principal.FindFirstValue(ClaimTypes.Email));
-                    user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                    UserName = "name",
+                    Email = "mail",
+                    Cheeps = new List<Cheep>()
+                };
 
-                }
-                if (user.UserName!.Equals("name") || user.Email!.Equals("mail")){
-                    throw new ApplicationException("Error loading user information from external login.");
-                }
 
-                createResult = await _userManager.AddLoginAsync(user, info);
+
+                var createResult = await _userManager.CreateAsync(user);
                 if (createResult.Succeeded)
                 {
+                    if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                    {
+                        await _userManager.SetUserNameAsync(user, info.Principal.FindFirstValue(ClaimTypes.Name));
+                        user.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    }
+                    if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                    {
+                        await _userManager.SetEmailAsync(user, info.Principal.FindFirstValue(ClaimTypes.Email));
+                        user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-                    // Include the access token in the properties
-                    var props = new AuthenticationProperties();
-                    props.StoreTokens(info.AuthenticationTokens);
+                    }
+                    if (user.UserName!.Equals("name") || user.Email!.Equals("mail"))
+                    {
+                        throw new ApplicationException("Error loading user information from external login.");
+                    }
 
-                    await _signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
-                    _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                    return RedirectToPage("/Public");
+                    createResult = await _userManager.AddLoginAsync(user, info);
+                    if (createResult.Succeeded)
+                    {
+
+                        // Include the access token in the properties
+                        var props = new AuthenticationProperties();
+                        props.StoreTokens(info.AuthenticationTokens);
+
+                        await _signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
+                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        return RedirectToPage("/Public");
+                    }
+                }
+                foreach (var error in createResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            foreach (var error in createResult.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
 
-        ReturnUrl = returnUrl;
-        return RedirectToPage("/Public");
+            ReturnUrl = returnUrl;
+            return RedirectToPage("/Public");
         }
     }
 
     public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
     {
-       if (ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -175,15 +167,12 @@ public class ExternalLoginModel : PageModel
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
-
             var user = new Author
             {
                 UserName = "name",
                 Email = "email",
                 Cheeps = new List<Cheep>()
             };
-
-
 
             var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
@@ -199,11 +188,6 @@ public class ExternalLoginModel : PageModel
                     user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
                 }
-                /*
-                foreach (var item in info.Principal.Claims)
-                {
-                    Console.WriteLine(item.Type + " " + item.ValueType + " " + item.Value);
-                }*/
 
                 result = await _userManager.AddLoginAsync(user, info);
                 if (result.Succeeded)
@@ -225,6 +209,6 @@ public class ExternalLoginModel : PageModel
         }
 
         ReturnUrl = returnUrl;
-        return Page(); 
+        return Page();
     }
 }

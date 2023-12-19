@@ -36,8 +36,6 @@ public class CheepRepository : ICheepRepository
     // The method 'GetCheepsFromAuthor' loads all cheeps from a certain Author, from a certain page.  
     public async Task<IEnumerable<CheepDTO>> GetCheepsFromAuthor(string user, int page, int offset)
     {
-
-
         return await _context.Cheeps
         .OrderByDescending(c => c.TimeStamp)
         .Where(u => u.Author.UserName == user)
