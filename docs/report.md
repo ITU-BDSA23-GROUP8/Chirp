@@ -115,6 +115,7 @@ Likely, it is best to describe how we clone your project, which commands we have
 
 	*"appsettings.Development.json"*
 7. In this file, paste the following: 
+```
 
 		{
 			"DetailedErrors": true,
@@ -130,6 +131,7 @@ Likely, it is best to describe how we clone your project, which commands we have
 			"AllowedHosts": "*"
 		}	
 
+```
 
 		
 <br>
