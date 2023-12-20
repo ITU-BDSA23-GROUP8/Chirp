@@ -123,11 +123,15 @@ Here, you can assume that we already cloned your repository in the step above.
 
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 
+
+Our test suite is completed of 20 tests, of which are either Unit-, Integration- or End to End-tests. 3 of the 20 tests are made with Playwright. 
+
+
+
 ***Software needed***: 
 - VSCODE
 - .NET 7.0
 - Playwright
-- Firefox Browser
 
 **1. Running the tests**
 1. Confirm you have Playwright installed and open. 
@@ -136,9 +140,16 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 		
 		dotnet test
 
-4. **Expected result** should look alike, with 17 passed tests.: 
+4. **Expected result *1st Part* ** should look alike, with 17 passed tests.: 
 
 	![ScreenshotOfTerminal](images/FirstPartOfTests.png)
+
+5. Now, open a second terminal, from the /test/PlaywrightTests folder
+6. To run the second part of the test suite (the Playwright tests), type in this terminal: 
+
+		dotnet test
+
+4. **Expected result *2nd Part*** should look alike, with 3 passed tests.: (OBS: You may have to manually press green button 'Authorize' at one point)
 
 ## Ethics
 --
