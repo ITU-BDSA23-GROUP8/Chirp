@@ -98,16 +98,31 @@ This workflow first builds and tests our program. And if this is successful then
 
 ## Team work
 
-Show a screenshot of your project board right before hand-in.
-Briefly describe which tasks are still unresolved, i.e., which features are missing from your applications or which functionality is incomplete.
+### Project board
+![Illustration of the _Chirp!_ project board](images/ProjectBoard.png)
+As seen in the project board most of the issues have been completed and closed. We have a few incomplete issues; Automation of project tasks and Test of new features. 
 
-Briefly describe and illustrate the flow of activities that happen from the new creation of an issue (task description), over development, etc. until a feature is finally merged into the `main` branch of your repository.
+The automation of project tasks has been attempted in BoardAssignment.yml in Chirp. However it was never able to run properly and we decided to move the issue to the backlog and revisit if we had the time. It has not been a priority. 
 
-### How to make _Chirp!_ work locally
+The test-issue concerns the newly added features of the ‘Profile’-page and the ForgetMe feature. Due to time constraints these have not been tested either in a unit- or integration-test. Therefore the issue stays in the ready-category. 
 
-There has to be some documentation on how to come from cloning your project to a running system.
-That is, Rasmus or Helge have to know precisely what to do in which order.
-Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
+### Issues
+The following flowchart shows the road from issue to finalized merge into main. 
+
+![Illustration of the _Chirp!_ issue activity diagram](images/TeamWorkIssues.drawio.png)
+
+
+We start by creating the issue with the correct criteria for a proper en wellformulated issue, i.e. user story and success criteria. Then the issue is moved around the project board depending on its state. When the issue has been worked on and is ready to be committed to our main branch, a pull request will ask the different team members to review the commit and either approve, request changes or provide feedback. 
+A consequence of creating a pull request is that GitHub runs our workflow “.NET Build and Test”, as it is triggered by a pull request. This catches build or test failures before a group member gets the chance to merge into the main branch, which results in less bugs or other issues ending up in main. 
+
+This means we’ve had an iterative approach to working on the issues, because we might change some design-element, code or a test failed and we had to fix the issue. 
+
+When the commit is merged to main, the issue is closed and moved to the ‘Done’-column in the project board. 
+
+Because the automation of assigning issues to team members never fully worked, we have assigned them manually. Usually each issue has been worked on by two or more team members and has utilized pair-programming. 
+
+
+## How to make _Chirp!_ work locally
 
 ***Software needed***: 
 - VSCODE
@@ -168,14 +183,17 @@ Likely, it is best to describe how we clone your project, which commands we have
 
         dotnet run
 3. In the terminal output, find the localhost link and copy the address: 
-![ScreenshotOfTerminal](images/localhostMarked.png)
+
+
+![Screenshot of terminal after dotnet run](images/localhostMarked.png)
+
 4. Open a new window in Firefox and paste in the address from **step 3**. 
 		
 
 **4. Expected Result**
 1. You should arrive at the main page of the Chirp! Application 
 
-![ScreenshotOfChirpWeb](images/ChirpStartPage.png)
+![Screenshot of Chirp! in localhost](images/ChirpStartPage.png)
 
 ## How to run test suite locally
 
@@ -205,7 +223,7 @@ Ideally, one would have a seperate environment 'TEST', in which these end2end te
 
 4. **Expected result *1st Part*** should look alike, with 17 passed tests.: 
 
-	![ScreenshotOfTerminal](images/FirstPartOfTests.png)
+	![Screenshot of terminal after dotnet test](images/FirstPartOfTests.png)
 
 5. Now, open a second terminal, from the /test/PlaywrightTests folder
 6. To run the second part of the test suite (non-Playwright tests), type in this terminal: 
@@ -214,7 +232,7 @@ Ideally, one would have a seperate environment 'TEST', in which these end2end te
 
 4. **Expected result *2nd Part*** should look alike, with 3 passed tests.: (OBS: You may have to manually press green button 'Authorize' at one point during the testing).
 
-	![ScreenshotOfTerminal](images/3PassedPlaywrightTests.png)
+	![Screenshot of terminal after dotnet test in Playwright](images/3PassedPlaywrightTests.png)
 
 # Ethics
 
