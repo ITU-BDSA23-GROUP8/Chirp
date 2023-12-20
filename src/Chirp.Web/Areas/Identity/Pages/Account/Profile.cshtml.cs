@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MyApp.Namespace
 {
+    /// <summary>
+    /// ProfileModel is a page model that fetches and models data specific for the logged in user. 
+    /// </summary>
     public class ProfileModel : PageModel
     {
         public List<AuthorDTO> Following { get; set; }
@@ -22,6 +25,14 @@ namespace MyApp.Namespace
 
         public string Email;
 
+        /// <summary>
+        /// Constructor depends on abstractions like interfaces according to dependency injection.
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="authorrepo"></param>
+        /// <param name="likerepo"></param>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         public ProfileModel(ICheepRepository repo, IAuthorRepository authorrepo, ILikeRepository likerepo, UserManager<Author> userManager, SignInManager<Author> signInManager)
         {
             _repository = repo;
@@ -31,6 +42,11 @@ namespace MyApp.Namespace
             _signInManager = signInManager;
         }
 
+        /// <summary>
+        /// OnGetAsync() uses the repositories to fetch relevant data. 
+        /// </summary>
+        /// <returns></returns>
+
         public async Task OnGetAsync()
         {
             if (User.Identity!.IsAuthenticated)
@@ -38,9 +54,11 @@ namespace MyApp.Namespace
                 var userName = User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
                 var userEmail = User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
+                // fetch user's following
                 var following = await _authorrepository.GetFollowing(new AuthorDTO(userName, userEmail));
                 Following = following.ToList();
 
+                // fetch user claims for name and email
                 var claimsIdentity = User.Identity as ClaimsIdentity;
                 var emailClaim = claimsIdentity!.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
                 Email = emailClaim!.Value;
@@ -48,6 +66,7 @@ namespace MyApp.Namespace
                 var nameClaim = claimsIdentity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
                 Name = nameClaim!.Value;
 
+                // fetch user's cheeps
                 var cheeps = await _repository.GetAllCheepsFromAuthor(Name);
                 Cheeps = cheeps.ToList();
 
@@ -55,6 +74,12 @@ namespace MyApp.Namespace
 
         }
 
+        /// <summary>
+        /// OnPostForgetMe() is a named page handler, that handles Forget Me functionality.
+        /// Uses UserManager and SignInManager to delete user and signout. 
+        /// All likes from user are deleted first. 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostForgetMe()
         {
             var user = await _userManager.GetUserAsync(User);

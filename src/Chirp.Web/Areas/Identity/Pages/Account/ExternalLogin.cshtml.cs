@@ -12,6 +12,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Areas.Identity.Pages.Account;
 
+/// <summary>
+/// ExternalLoginModel is a razor page model.
+/// The page model is taken from ASP.NET Core Identity Razor Class Library and adapted to fit our specific needs. 
+/// It handles external login to GitHub. 
+/// </summary>
 public class ExternalLoginModel : PageModel
 {
     private readonly SignInManager<Author> _signInManager;
@@ -45,12 +50,26 @@ public class ExternalLoginModel : PageModel
         public string Email { get; set; }
     }
 
+    /// <summary>
+    /// OnGetAsync() is a GET page handler for ExternalLogin. 
+    /// This challenges GitHub authentication scheme and redirects to OnGetCallbackAsync().
+    /// </summary>
+    /// <param name="returnUrl"></param>
+    /// <returns></returns>
     public IActionResult OnGetAsync(string returnUrl = null)
     {
         var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
         var properties = _signInManager.ConfigureExternalAuthenticationProperties("GitHub", redirectUrl);
         return new ChallengeResult("GitHub", properties);
     }
+
+    /// <summary>
+    /// Handles registering and authenticating a user through an external provide. This is always GitHub. 
+    /// </summary>
+    /// <param name="returnUrl"></param>
+    /// <param name="remoteError"></param>
+    /// <returns></returns>
+    /// <exception cref="ApplicationException"></exception>
 
     public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
     {
@@ -103,7 +122,7 @@ public class ExternalLoginModel : PageModel
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
 
-
+                // A temporary Author is created. UserName and Email will be assigned to Claim values below.
                 var user = new Author
                 {
                     UserName = "name",
@@ -127,6 +146,7 @@ public class ExternalLoginModel : PageModel
                         user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
                     }
+                    // If user has been authorized through GitHub, but no mail or name is avaiable through Claims, throw an exception
                     if (user.UserName!.Equals("name") || user.Email!.Equals("mail"))
                     {
                         throw new ApplicationException("Error loading user information from external login.");
@@ -154,61 +174,5 @@ public class ExternalLoginModel : PageModel
             ReturnUrl = returnUrl;
             return RedirectToPage("/Public");
         }
-    }
-
-    public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
-    {
-        if (ModelState.IsValid)
-        {
-            // Get the information about the user from the external login provider
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                throw new ApplicationException("Error loading external login information during confirmation.");
-            }
-
-            var user = new Author
-            {
-                UserName = "name",
-                Email = "email",
-                Cheeps = new List<Cheep>()
-            };
-
-            var result = await _userManager.CreateAsync(user);
-            if (result.Succeeded)
-            {
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
-                {
-                    await _userManager.SetUserNameAsync(user, info.Principal.FindFirstValue(ClaimTypes.Name));
-                    user.UserName = info.Principal.FindFirstValue(ClaimTypes.Name);
-                }
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-                {
-                    await _userManager.SetEmailAsync(user, info.Principal.FindFirstValue(ClaimTypes.Email));
-                    user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
-                }
-
-                result = await _userManager.AddLoginAsync(user, info);
-                if (result.Succeeded)
-                {
-
-                    // Include the access token in the properties
-                    var props = new AuthenticationProperties();
-                    props.StoreTokens(info.AuthenticationTokens);
-
-                    await _signInManager.SignInAsync(user, props, authenticationMethod: info.LoginProvider);
-                    _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                    return RedirectToPage();
-                }
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
-
-        ReturnUrl = returnUrl;
-        return Page();
     }
 }
