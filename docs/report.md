@@ -27,15 +27,10 @@ Make sure to illustrate which part of your code is residing in which layer.
 
 ## Architecture of deployed application
 
-Illustrate the architecture of your deployed application.
-Remember, you developed a client-server application.
-Illustrate the server component and to where it is deployed, illustrate a client component, and show how these communicate with each other.
+![ScreenshotOfDeployedApplicationIllustration](images/DeployedApplicationArchitecture.png)
 
-**OBS**: In case you ran out of credits for hosting an Azure SQL database and you switched back to deploying an application with in-process SQLite database, then do the following:
+The illustration displays that we are using a client/server architecture in our program, with the Azure Server connecting to an Azure SQL Server Database. 
 
-- Under this section, provide two diagrams, one that shows how _Chirp!_ was deployed with hosted database and one that shows how it is now again with SQLite.
-- Under this section, provide a brief description of the reason for switching again to SQLite as database.
-- In that description, provide a link to the commit hash in your GitHub repository that points to the latest version of your _Chirp!_ application with hosted database (we look at the entire history of your project, so we see that it was there at some point).
 
 ## User activities
 
@@ -132,14 +127,14 @@ Likely, it is best to describe how we clone your project, which commands we have
 
         dotnet run
 3. In the terminal output, find the localhost link and copy the address: 
-			![ScreenshotOfTerminal](images/localhostMarked.png)
+![ScreenshotOfTerminal](images/localhostMarked.png)
 4. Open a new window in Firefox and paste in the address from **step 3**. 
 		
 
 **4. Expected Result**
 1. You should arrive at the main page of the Chirp! Application 
 
-![ScreenshotOfTerminal](images/ChirpStartPage.png)
+![ScreenshotOfChirpWeb](images/ChirpStartPage.png)
 
 ## How to run test suite locally
 
@@ -152,6 +147,8 @@ The **integration tests** check the website displays the correct information, an
 
 The **end2end tests**, tests the program's overall functionality from start to end, including login and authorization. 
 
+As a note, we are aware that the Playwright tests currently directly tests directly upon the PROD Server website (meaning, test cheeps etc are actually publicized, although then deleted again in the tests). 
+Ideally, one would have a seperate environment 'TEST', in which these end2end tests are actualized. 
 
 ***Software needed***: 
 - VSCODE
