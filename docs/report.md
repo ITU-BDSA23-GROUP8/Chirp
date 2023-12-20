@@ -78,10 +78,23 @@ The diagram also illustrates the process of getting authenticated by Github. The
 
 ## Build, test, release, and deployment
 
-Illustrate with a UML activity diagram how your _Chirp!_ applications are build, tested, released, and deployed.
-That is, illustrate the flow of activities in your respective GitHub Actions workflows.
+### Build and Test
+When making a pull request or pushing to main, Github Actions gets triggered to execute the workflow ‘build_and_test.yml’. Here we build and test our program. This is done to make sure that the new changes made don’t interfere with the ability to build and test our program. It is worth noticing that we had to filter out our integrationtest from the “build_and_test” workflow by adding the command: `dotnet test --filter FullyQualifiedName\!~IntegrationTest --no-build` as the tests fail here because of the WebApplicationFactory as we don't have the connectionstring when not in production. 
 
-Describe the illustration briefly, i.e., how your application is built, tested, released, and deployed.
+![Illustration of the _Chirp!_ build and test](images/TestBuild.png)
+
+### Build and Deploy
+When pushing to main, Github Actions gets triggered to execute the workflow ‘main_bdsagroup8chirprazor.yml’. This builds and deploys our ASP.Net Core app to Azure Web App. This is done to make sure that our program does not fall behind when making complete changes. If the build is successful the workflow will start deploying. Here it will download the artifact from the build and deploy this to Azure.
+
+![Illustration of the _Chirp!_ build and deploy](images/BuildAndDeploy.png)
+
+### Publish
+When pushing to main with a tag Github Actions gets triggered to execute the workflow ‘publish.yml’. The tag needs to be in the style “v.*.*.*” to run the workflow. The tag has been a point of contention throughout and has only worked in the end. Therefore we don’t have a long release history, because the releases have been under the ‘main’-tag. 
+This workflow first builds and tests our program. And if this is successful then it begins its release. We make a release for the 3 different operating systems in a matrix: “Linux”, “Windows” and “MacOS”. The workflow then makes a zipped version of Chirp!. 
+
+![Illustration of the _Chirp!_ publish](images/Release.png)
+
+
 
 ## Team work
 
@@ -126,7 +139,8 @@ Likely, it is best to describe how we clone your project, which commands we have
 				}
 			},
 			"ConnectionStrings": {
-				"SqlServer": "Server=127.0.0.1,1433;Database=Master;User Id=SA;Password=<YourStrong@Passw0rd> ;TrustServerCertificate=True"
+				"SqlServer": "Server=127.0.0.1,1433;Database=Master;User Id=SA 
+				Password=<YourStrong@Passw0rd> ;TrustServerCertificate=True"
 			},
 			"AllowedHosts": "*"
 		}	
