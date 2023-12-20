@@ -176,18 +176,9 @@ Ideally, one would have a seperate environment 'TEST', in which these end2end te
 	![ScreenshotOfTerminal](images/3PassedPlaywrightTests.png)
 
 # Ethics
---
 
 ## License
-State which software license you chose for your application.
-
---We use an MIT License. 
+We use an MIT License for software. We chose this license as it is very simple and permissive. It grants permission to modifying, distributing, private and commercial use. As there is no warranty and liability, the copyright holders are not responsible for how the software is used. 
 
 ## LLMs, ChatGPT, CoPilot, and others
---We did not make use of any LLMs in our project. 
-
-State which LLM(s) were used during development of your project.
-In case you were not using any, just state so.
-In case you were using an LLM to support your development, briefly describe when and how it was applied.
-Reflect in writing to which degree the responses of the LLM were helpful.
-Discuss briefly if application of LLMs sped up your development or if the contrary was the case.
+We did not make use of any LLMs in our project. 
