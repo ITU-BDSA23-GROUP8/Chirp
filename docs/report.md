@@ -147,7 +147,7 @@ The **integration tests** check the website displays the correct information, an
 
 The **end2end tests**, tests the program's overall functionality from start to end, including login and authorization. 
 
-As a note, we are aware that the Playwright tests currently directly tests directly upon the PROD Server website (meaning, test cheeps etc are actually publicized, although then deleted again in the tests). 
+As a note, we are aware that the Playwright tests currently tests directly upon the PROD Server website (meaning, test cheeps etc are actually publicized, although then deleted again in the tests). 
 Ideally, one would have a seperate environment 'TEST', in which these end2end tests are actualized. 
 
 ***Software needed***: 
@@ -162,12 +162,12 @@ Ideally, one would have a seperate environment 'TEST', in which these end2end te
 		
 		dotnet test
 
-4. **Expected result *1st Part* ** should look alike, with 17 passed tests.: 
+4. **Expected result *1st Part*** should look alike, with 17 passed tests.: 
 
 	![ScreenshotOfTerminal](images/FirstPartOfTests.png)
 
 5. Now, open a second terminal, from the /test/PlaywrightTests folder
-6. To run the second part of the test suite (the Playwright tests), type in this terminal: 
+6. To run the second part of the test suite (non-Playwright tests), type in this terminal: 
 
 		dotnet test
 
