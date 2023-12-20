@@ -2,10 +2,7 @@ name: Publish_git
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - v.*.*.*
+    tags: "v*.*.*"
 
 jobs:
   build:
@@ -58,7 +55,7 @@ jobs:
           release_name="Chirp-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name" -p:DebugSymbols=false -p:DebugType=None -p:PublishSingleFile=true --self-contained false
+          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name" --self-contained false
 
           
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
