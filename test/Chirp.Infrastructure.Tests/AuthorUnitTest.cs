@@ -30,6 +30,7 @@ public class AuthorUnitTest
         Assert.NotNull(createdAuthor);
     }
     
+    [Fact]
     public async void TestDoubleCreatedAuthor()
     {
         //Arrange
