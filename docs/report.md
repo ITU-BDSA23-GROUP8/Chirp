@@ -76,15 +76,11 @@ Briefly describe and illustrate the flow of activities that happen from the new 
 
 ### How to make _Chirp!_ work locally
 
-There has to be some documentation on how to come from cloning your project to a running system.
-That is, Rasmus or Helge have to know precisely what to do in which order.
-Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
-
 ***Software needed***: 
 - VSCODE
 - .NET 7.0
 - Docker
-- A browser that is not Google Chrome
+- A browser that is *not* Google Chrome
 
 <br>
 
@@ -147,19 +143,14 @@ Likely, it is best to describe how we clone your project, which commands we have
 
 ### How to run test suite locally
 
-List all necessary steps that Rasmus or Helge have to perform to execute your test suites.
-Here, you can assume that we already cloned your repository in the step above.
 
-Briefly describe what kinds of tests you have in your test suites and what they are testing.
+Our test suite is completed of 20 tests, of which are either Unit-, Integration- or End2End-tests. 3 of the 20 tests are made with Playwright. 
 
+The **unit tests** mainly test that our SQL database and Chirp.Core work as expected and create the corresponding object DTO's. 
 
-Our test suite is completed of 20 tests, of which are either Unit-, Integration- or End to End-tests. 3 of the 20 tests are made with Playwright. 
+The **integration tests** check the website displays the correct information, and that the client is on the correct page (Public timeline / Private timeline), with the relevant info for this page. 
 
-The unit tests mainly test that our SQL database and Chirp.Core work as expected and create the corresponding object DTO's. 
-
-The integration tests check the website has the correct information, and that the client is on the correct page (Public timeline / Private timeline), with the relevant info for this page. 
-
-The end to end tests, tests the program's overall functionality from start to end, including login and authorization. 
+The **end2end tests**, tests the program's overall functionality from start to end, including login and authorization. 
 
 
 ***Software needed***: 
@@ -184,6 +175,8 @@ The end to end tests, tests the program's overall functionality from start to en
 		dotnet test
 
 4. **Expected result *2nd Part*** should look alike, with 3 passed tests.: (OBS: You may have to manually press green button 'Authorize' at one point during the testing).
+
+	![ScreenshotOfTerminal](images/3PassedPlaywrightTests.png)
 
 ## Ethics
 --
