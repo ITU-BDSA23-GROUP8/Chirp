@@ -67,6 +67,55 @@ There has to be some documentation on how to come from cloning your project to a
 That is, Rasmus or Helge have to know precisely what to do in which order.
 Likely, it is best to describe how we clone your project, which commands we have to execute, and what we are supposed to see then.
 
+***Software needed***: 
+- VSCODE
+- .NET 7.0
+- Docker
+- Firefox Browser
+
+<br>
+
+**1. Cloning the project**
+1. Go to the Github repository page for Group 8: 
+     - https://github.com/ITU-BDSA23-GROUP8
+2. Press on the green button '*<> Code*'  and copy the HTTPS address
+3. Open a new window in VSCODE
+4. Press '*Clone Git Repository*' and paste in the address from **step 2**. 
+5. Confirm you are able to see the folders; all the code -  including tests etc. 
+		
+
+<br>
+
+**2. Starting the database**
+1. Open the Docker Desktop program
+2. In VSCODE, start a new terminal from /Chirp folder 
+3. To start the Database, enter all of the following into the terminal (can be done in one command): 
+
+        docker stop sql1
+        docker rm sql1 
+
+		docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>" \
+		-p 1433:1433 --name sql1 --hostname sql1 \ 
+		-d \ 
+		mcr.microsoft.com/mssql/server:2022-latest
+
+<br>
+
+**3. Starting the server**
+1. In VSCODE, start a new terminal from the /ChirpWeb folder 
+2. To start the server on your local machine, type in the terminal: 
+
+        dotnet run
+3. In the terminal output, find the localhost link and copy the address: 
+			![ScreenshotOfTerminal](images/localhostMarked.png)
+4. Open a new window in Firefox and paste in the address from **step 3**. 
+		
+
+**4. Expected Result**
+1. You should arrive at the main page of the Chirp! Application 
+
+![ScreenshotOfTerminal](images/ChirpStartPage.png)
+
 ### How to run test suite locally
 
 List all necessary steps that Rasmus or Helge have to perform to execute your test suites.
@@ -74,13 +123,35 @@ Here, you can assume that we already cloned your repository in the step above.
 
 Briefly describe what kinds of tests you have in your test suites and what they are testing.
 
+***Software needed***: 
+- VSCODE
+- .NET 7.0
+- Playwright
+- Firefox Browser
+
+**1. Running the tests**
+1. Confirm you have Playwright installed and open. 
+2. In VSCODE, start a new terminal from the /Chirp folder 
+3. To run the first part of the test suite (except from Playwright tests), type in the terminal: 
+		
+		dotnet test
+
+4. **Expected result** should look alike, with 17 passed tests.: 
+
+	![ScreenshotOfTerminal](images/FirstPartOfTests.png)
+
 ## Ethics
+--
 
 ### License
 
 State which software license you chose for your application.
 
+--We use an MIT License. 
+
 ### LLMs, ChatGPT, CoPilot, and others
+
+--We did not make use of any LLMs in our project. 
 
 State which LLM(s) were used during development of your project.
 In case you were not using any, just state so.
