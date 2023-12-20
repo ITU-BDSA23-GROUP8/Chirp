@@ -5,7 +5,7 @@ author:
 - "Annika Jensby Lütken <alyt@itu.dk>"
 - "Astrid Emilie Bagge-Kjær <astb@itu.dk>"
 - "Clara Augusta Sønderborg <auso@itu.dk>"
-- "Julie Sjoukje Klompmaker <jukl@itu.dk>"
+- "Julia Sjoukje Klompmaker <jukl@itu.dk>"
 - "Sarah Schalls Vestergren <sscv@itu.dk>"
 numbersections: true
 ---
@@ -36,33 +36,43 @@ We chose to use ASP.NET Core Identity because, while there is some auto generate
 
 ## Architecture — In the small
 
-Illustrate the organization of your code base.
-That is, illustrate which layers exist in your (onion) architecture.
-Make sure to illustrate which part of your code is residing in which layer.
+![Illustration of the _Chirp!_ architecture.](images/OnionAndDomainModel1.png)
+
+The given diagram represents an Onion Architecture. The layers are divided into ‘Core’,  ‘Infrastructure’ and ‘Web’. Each of our classes are represented in their given layer, according to their functionality in the program. 
+
+The ‘Core’ layer reflects our application logic, and holds the repository interfaces and DTO’s (Data Transfer Objects).
+
+The  ‘Infrastructure’ layer follows the business rules set in our Core-layer. It holds our data models such as ‘Like’, ‘Cheep’ and ‘Author’, with implementations of their given repositories. The repositories contain logic of how our data models behave with each other and according to the user input. Here it is important to note that our class ChirpContext acts as a gateway between the Core-layer and the Web-layer. 
+
+The ‘Web’ layer, reflects the Framework of the Chirp! Application, and hereby holds Program.cs, Razor Pages, etc.
+
 
 ## Architecture of deployed application
 
-![ScreenshotOfDeployedApplicationIllustration](images/DeployedApplicationArchitecture.png)
+![Illustration of the _Chirp!_ deployed application architecture](images/DeployedApplicationArchitecture.png)
 
 The illustration displays that we are using a client/server architecture in our program, with the Azure Server connecting to an Azure SQL Server Database. 
 
 
 ## User activities
+![Illustration of the _Chirp!_ user activity](images/UserActivity.drawio.png)
 
-Illustrate typical scenarios of a user journey through your _Chirp!_ application.
-That is, start illustrating the first page that is presented to a non-authorized user, illustrate what a non-authorized user can do with your _Chirp!_ application, and finally illustrate what a user can do after authentication.
+The activity diagram illustrates how a user can journey through our Chirp! application. It shows what an anonymous user can do within the application, where they can navigate to three different pages. If the user is logged in, they can see a public timeline, a user timeline for another user or their own timeline. The user can like and unlike cheeps from all mentioned pages, as well as follow and unfollow other users. But it is only from the public timeline that a user can post a cheep. 
 
-Make sure that the illustrations are in line with the actual behavior of your application.
+The user can end the journey by ‘Forget me’ from the Profile page or anytime by Logout page. 
+
 
 ## Sequence of functionality/calls trough _Chirp!_
 
-With a UML sequence diagram, illustrate the flow of messages and data through your _Chirp!_ application.
-Start with an HTTP request that is send by an unauthorized user to the root endpoint of your application and end with the completely rendered web-page that is returned to the user.
+![Illustration of the _Chirp!_ calls/functionality sequence](images/SeuqenceDiagram.png)
 
-Make sure that your illustration is complete.
-That is, likely for many of you there will be different kinds of "calls" and responses.
-Some HTTP calls and responses, some calls and responses in C# and likely some more.
-(Note the previous sentence is vague on purpose. I want that you create a complete illustration.)
+
+The sequence diagram illustrates different calls through our Chirp! application. There are 4 lifelines: ‘Client’, ‘Chirp.Web’, ‘Chirp.Infrastructure’ and ‘Database’. 
+
+The client can send HTTP calls to Chirp.Web which then, on behalf of the HTTP call, makes a C# call to Chirp.Infrastructure. Infrastructure is able to communicate with the database through SQL queries which then generates the response to the client. This shows how the different subsystems of our program communicate with each other based on the calls from the client. 
+Notice the client is not authenticated at the beginning of the sequence but there will still be sent a HTTP get request to get all cheeps from the database as these are visible even for an unauthorized user. 
+
+The diagram also illustrates the process of getting authenticated by Github. The authentication in Oauth with GitHub sequence is not shown in the diagram. But in short, Chirp! uses Oauth/Github to authenticate users via GitHub API. 
 
 # Process
 
