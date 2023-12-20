@@ -1,6 +1,19 @@
+---
+title: Chirp! Report
+subtitle: BDSA 2023 Group 8
+author:
+- Clara Augusta Sønderborg (auso@itu.dk)
+- Astrid Emilie Bagge-Kjær (astb@itu.dk)
+- Julie Sjoukje Klompmaker (jukl@itu.dk)
+- Annika Jensby Lütken (alyt@itu.dk)
+- Sarah Schalls Vestergren (sscv@itu.dk)
+date: 21/12/2023
+---
+
+
 # Analysis, design and software architecture
 
-## Introductions
+## Introduction
 
 ## Design and architecture
 
