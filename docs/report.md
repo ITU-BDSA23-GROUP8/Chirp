@@ -67,7 +67,7 @@ The user can end the journey by ‘Forget me’ from the Profile page or anytime
 
 ## Sequence of functionality/calls through _Chirp!_
 
-![Illustration of the _Chirp!_ calls/functionality sequence](images/SeuqenceDiagram.png)
+![Illustration of the _Chirp!_ calls/functionality sequence](images/SeuqenceDiagram.drawio.png)
 
 
 The sequence diagram illustrates different calls through our Chirp! application. There are 4 lifelines: ‘Client’, ‘Chirp.Web’, ‘Chirp.Infrastructure’ and ‘Database’. 
@@ -78,39 +78,32 @@ Infrastructure is able to communicate with the database through SQL queries whic
 
 Notice the client is not authenticated at the beginning of the sequence but there will still be sent a HTTP get request to get all cheeps from the database as these are visible even for an unauthorized user. 
 
-The diagram illustrates the process of getting authenticated by Github. The authentication in Oauth with GitHub sequence is not shown in the diagram. But in short, Chirp! uses Oauth/Github to authenticate users via the GitHub API. 
+The diagram illustrates the process of getting authenticated by Github. The authentication in Oauth with GitHub sequence is not shown in the diagram. But in short, Chirp! uses Oauth/Github to authenticate users via the GitHub API.
 
 # Process
 
 ## Build, test, release, and deployment
 
 ### Build and Test
-![Illustration of the _Chirp!_ build and test](images/TestBuild.png)
+![Illustration of the _Chirp!_ build and test](images/TestBuild.png){ width=50% }
 
 When making a pull request or pushing to main, Github Actions gets triggered to execute the workflow ‘build_and_test.yml’. This is done to make sure that the new changes made don’t interfere with the ability to build and test our program. 
 
 It is worth noticing that we had to filter out our integration test from the 'build_and_test.yml' workflow by adding the command: `dotnet test --filter FullyQualifiedName\!~IntegrationTest --no-build`. This is because the tests fail, due to the WebApplicationFactory, as we don't have the connection string when running the workflow in GitHub. 
 
-
 ### Build and Deploy
-![Illustration of the _Chirp!_ build and deploy](images/BuildAndDeploy.png)
+![Illustration of the _Chirp!_ build and deploy](images/BuildAndDeploy.png){ width=50% }
 
 When pushing to main, Github Actions gets triggered to execute the workflow ‘main_bdsagroup8chirprazor.yml’. This builds and deploys our ASP.Net Core app to Azure Web App. 
 
 This is done to make sure that our hosted application is always up to date. If the build is successful the workflow will start deploying. Here it will download the artifact from the build and deploy this to Azure.
 
-
-
 ### Publish
-![Illustration of the _Chirp!_ publish](images/Release.png)
+![Illustration of the _Chirp!_ publish](images/Release.png){ width=50% }
 
 When pushing to main with a tag Github Actions gets triggered to execute the workflow ‘publish.yml’. The tag needs to be in the style “v.*.*.*” to run the workflow. The tag has been a point of contention throughout and has only worked in the end. Therefore we don’t have a long release history, because the releases have been under the ‘main’-tag. 
 
 This workflow first builds and tests our program (as seen in Build and Test). And if this is successful, then it begins its release. We make a release for the 3 different operating systems in a matrix: “Linux”, “Windows” and “MacOS”. The workflow then makes a zipped version of Chirp!. 
-
-
-
-
 
 ## Team work
 
@@ -138,27 +131,37 @@ When the commit is merged to main, the issue is closed and automatically moves t
 
 Because the automation of assigning issues to team members never fully worked, we have assigned them manually. Usually each issue has been worked on by two or more team members and has utilized pair-programming. 
 
-
 ## How to make _Chirp!_ work locally
 
 ***Software needed***: 
+
 - VSCODE
+
 - .NET 7.0
+
 - Docker
+
 - A browser that is *not* Google Chrome
 
 <br>
 
 **1. Cloning the project**
+
 1. Go to the Github repository page for Group 8: 
      - https://github.com/ITU-BDSA23-GROUP8/Chirp
+
 2. Press on the green button '*<> Code*'  and copy the HTTPS address
+
 3. Open a new window in VSCODE
+
 4. Press '*Clone Git Repository*' and paste in the address from **step 2**. 
+
 5. Confirm you are able to see the folders; all the code -  including tests etc. 
+
 6. In the /Chirp.Web folder, make a new file with the name: 
 
 	*"appsettings.Development.json"*
+
 7. In this file, paste the following: 
 ```
 
@@ -183,8 +186,11 @@ Because the automation of assigning issues to team members never fully worked, w
 <br>
 
 **2. Starting the database**
+
 1. Open the Docker Desktop program
+
 2. Start a new terminal
+
 3. To start the Database, enter the following into the terminal
 
        docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>" \
@@ -195,8 +201,11 @@ Because the automation of assigning issues to team members never fully worked, w
 <br>
 
 **3. Setup GitHub OAuth app**
+
 1. On GitHub create a OAuth app to localhost
+
 2. Start terminal at /Chirp.Web folder
+
 3. Enter the following in the terminal with clientId and clientSecret from GitHub:
 
 ``````
@@ -205,9 +214,10 @@ Because the automation of assigning issues to team members never fully worked, w
 	dotnet user-secrets set "authentication:github:clientSecret" "<YOUR_CLIENTSECRET>"
 ``````
 
-
 **4. Starting the server**
+
 1. Start a new terminal from the /Chirp.Web folder 
+
 2. To start the server on your local machine, type in the terminal: 
 
         dotnet run
@@ -218,14 +228,13 @@ Because the automation of assigning issues to team members never fully worked, w
 
 4. Open a new window in your browser (*not* Google Chrome) and paste in the address from **step 3**. 
 		
-
 **5. Expected Result**
+
 1. You should arrive at the main page of the Chirp! Application 
 
 ![Screenshot of Chirp! in localhost](images/ChirpStartPage.png)
 
 ## How to run test suite locally
-
 
 Our test suite consists of 20 tests, of which are either unit-, integration- or end2end-tests. 3 of the 20 tests are made with Playwright. 
 
@@ -239,13 +248,19 @@ As a note, we are aware that the Playwright tests currently tests directly upon 
 Ideally, one would have a seperate environment 'TEST', in which these end2end tests are actualized. 
 
 ***Software needed***: 
+
 - VSCODE
+
 - .NET 7.0
+
 - Playwright
 
 **1. Running the tests**
+
 1. Confirm you have Playwright installed. 
+
 2. Start a new terminal from the /Chirp folder 
+
 3. To run the first part of the test suite (except for Playwright tests), type in the terminal: 
 		
 		dotnet test
@@ -255,6 +270,7 @@ Ideally, one would have a seperate environment 'TEST', in which these end2end te
 	![Screenshot of terminal after dotnet test](images/FirstPartOfTests.png)
 
 5. Now, open another terminal, from the /test/PlaywrightTests folder
+
 6. To run the second part of the test suite (non-Playwright tests), type in terminal: 
 
 		dotnet test
