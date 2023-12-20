@@ -14,10 +14,25 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.drawio.png)
 
-Provide an illustration of your domain model.
-Make sure that it is correct and complete.
-In case you are using ASP.NET Identity, make sure to illustrate that accordingly.
+The domain model that represents our Chirp! application is shown in the given diagram. As pictured there are three main concepts; Author, Cheep and Like. 
+Like
+Like holds an Author- and CheepId as well as the Author that liked the Cheep and which Cheep was liked. 
+
+### Cheep
+The Cheep consists of an id, a timestamp, an author id and it holds the message that is posted to the Chirp! website. Furthermore, it takes an Author and a number of Likes. Here it is vital that a Cheep can only have one author, but have many likes from different users of Chirp!. 
+
+### Author
+Author represents the user of Chirp!. The author consists of the Cheeps they have written, the likes they have given and lists of Followers and Following, that each represents other Authors the user follows, and Authors that follow the user. 
+The Author inherits from IdentityUser, which is a part of AspNetCore. IdentityUser holds different fields that Author uses; Id, UserName and Email. 
+
+### ASP.NET Core Identity
+Chirp uses ASP.NET Core Identity for the login functionality and management of the users of Chirp!. It also supports authentication and authorization. In this Chirp!-implementation GitHub is used as a third party to log in. GitHub checks the username and password and authenticates to an existing GitHub-user. 
+([See ASP.NET Core Identity documentation](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-8.0&tabs=visual-studio))
+
+We chose to use ASP.NET Core Identity because, while there is some auto generated code it gives freedom to shape the code to fit our needs. This was prevalent e.g. when making the Author, because while we extended IdentityUser, we were also able to customize our Author-type to fit the needs of Chirp!. ([See ASP.NET Core Identity customization documentation](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-8.0))
+
 
 ## Architecture — In the small
 
