@@ -26,7 +26,7 @@ public class CheepUnitTest{
         //Act
         var author = new AuthorDTO("Gaston", "belle@gmail.com");
         var cheep = new CheepDTO("Gaston", "belle@gmail.com", "I <3 Belle", "2023-08-01 13:14:44", -1, 0);
-        repository.CreateCheep(cheep, author);
+        await repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "belle@gmail.com").Count();
 
         //Assert 
@@ -50,7 +50,7 @@ public class CheepUnitTest{
         //Act
         var author = new AuthorDTO("Helge", "ropf@itu.dk");
         var cheep = new CheepDTO("Helge","ropf@itu.dk", "Honey cookie", "2023-08-01 13:14:45", -1, 0);
-        repository.CreateCheep(cheep, author);
+        await repository.CreateCheep(cheep, author);
         var authorCount = context.Authors.Where(c => c.Email == "ropf@itu.dk").Count();
 
         //Assert 
