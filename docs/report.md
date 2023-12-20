@@ -71,19 +71,38 @@ Likely, it is best to describe how we clone your project, which commands we have
 - VSCODE
 - .NET 7.0
 - Docker
-- Firefox Browser
+- A browser that is not Google Chrome
 
 <br>
 
 **1. Cloning the project**
 1. Go to the Github repository page for Group 8: 
-     - https://github.com/ITU-BDSA23-GROUP8
+     - https://github.com/ITU-BDSA23-GROUP8/Chirp
 2. Press on the green button '*<> Code*'  and copy the HTTPS address
 3. Open a new window in VSCODE
 4. Press '*Clone Git Repository*' and paste in the address from **step 2**. 
 5. Confirm you are able to see the folders; all the code -  including tests etc. 
-		
+6. In the /Chirp.Web folder, make a new file with the name: 
 
+	*"appsettings.Development.json"*
+7. In this file, paste the following: 
+
+		{
+			"DetailedErrors": true,
+			"Logging": {
+				"LogLevel": {
+					"Default": "Information",
+					"Microsoft.AspNetCore": "Warning"
+				}
+			},
+			"ConnectionStrings": {
+				"SqlServer": "Server=127.0.0.1,1433;Database=Master;User Id=SA;Password=<YourStrong@Passw0rd> ;TrustServerCertificate=True"
+			},
+			"AllowedHosts": "*"
+		}	
+
+
+		
 <br>
 
 **2. Starting the database**
@@ -91,10 +110,7 @@ Likely, it is best to describe how we clone your project, which commands we have
 2. In VSCODE, start a new terminal from /Chirp folder 
 3. To start the Database, enter all of the following into the terminal (can be done in one command): 
 
-        docker stop sql1
-        docker rm sql1 
-
-		docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>" \
+       docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>" \
 		-p 1433:1433 --name sql1 --hostname sql1 \ 
 		-d \ 
 		mcr.microsoft.com/mssql/server:2022-latest
@@ -126,6 +142,11 @@ Briefly describe what kinds of tests you have in your test suites and what they 
 
 Our test suite is completed of 20 tests, of which are either Unit-, Integration- or End to End-tests. 3 of the 20 tests are made with Playwright. 
 
+The unit tests mainly test that our SQL database and Chirp.Core work as expected and create the corresponding object DTO's. 
+
+The integration tests check the website has the correct information, and that the client is on the correct page (Public timeline / Private timeline), with the relevant info for this page. 
+
+The end to end tests, tests the program's overall functionality from start to end, including login and authorization. 
 
 
 ***Software needed***: 
@@ -149,7 +170,7 @@ Our test suite is completed of 20 tests, of which are either Unit-, Integration-
 
 		dotnet test
 
-4. **Expected result *2nd Part*** should look alike, with 3 passed tests.: (OBS: You may have to manually press green button 'Authorize' at one point)
+4. **Expected result *2nd Part*** should look alike, with 3 passed tests.: (OBS: You may have to manually press green button 'Authorize' at one point during the testing).
 
 ## Ethics
 --
