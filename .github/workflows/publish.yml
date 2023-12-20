@@ -2,8 +2,7 @@ name: Publish_git
 
 on:
   push:
-    branches: [ workflow ]
-    tags: [ 'v*.*.*' ]
+    tags: "v*.*.*"
 
 jobs:
   build:
